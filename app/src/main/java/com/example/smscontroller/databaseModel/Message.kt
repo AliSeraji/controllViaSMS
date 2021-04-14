@@ -22,7 +22,6 @@ data class  Message(
     var id: Long? = null,
     @ColumnInfo(name = "station_id")
     var stationID: Long?,
-    @ColumnInfo(name = "message_text")
     var text: String = "",
     @ColumnInfo(name = "created_time")
     var createdTime: Date

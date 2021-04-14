@@ -10,15 +10,18 @@ import com.example.smscontroller.databaseModel.Message
 @Dao
 interface MessageDao {
     @Insert
-    fun insert(message: Message):Long?
+    suspend fun insert(message: Message):Long?
 
     @Query("SELECT * FROM messages")
-    fun loadAll(): LiveData<List<Message>>
+    suspend fun loadAll(): LiveData<List<Message>>
 
     @Query("SELECT * FROM messages WHERE  id =  :messageID")
-    fun loadByID(messageID:Long?):Message?
+    suspend fun loadByID(messageID:Long?):Message?
 
     @Query("SELECT * FROM messages WHERE station_id=:stationID")
-    fun loadAllFromStation(stationID:Long?): LiveData<List<Message>>
+    suspend fun loadAllFromStation(stationID:Long?): LiveData<List<Message>>
+
+    @Query("DELETE FROM messages")
+    suspend fun clear()
 
 }

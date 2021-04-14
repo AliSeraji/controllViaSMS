@@ -11,6 +11,14 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:actionBarStyle">@style/lightActionBar</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="lightActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="background">?attr/colorPrimaryVariant</item>
+        <item name="titleTextColor">?attr/colorOnPrimary</item>
+        <item name="title">@string/app_name</item>
+    </style>
+
 </resources>

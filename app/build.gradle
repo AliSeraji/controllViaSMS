@@ -29,9 +29,6 @@ android {
         }
     }
 
-
-
-
     buildFeatures{
         //noinspection DataBindingWithoutKapt
         dataBinding = true // for data binding
@@ -49,6 +46,7 @@ android {
 
 dependencies {
 
+    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -62,14 +60,16 @@ dependencies {
     def room_version = "2.2.6"
     def architecture_version = "2.1.0"
 
-    implementation "android.arch.persistence.room:runtime:" + "$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:" + "$room_version"
-    annotationProcessor "android.arch.persistence.room:compiler:" + "$room_version"
-    androidTestImplementation "android.arch.persistence.room:testing:" + "$room_version"
+    //room
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
 
-    implementation "android.arch.lifecycle:extensions:" + "$architecture_version"
-    annotationProcessor "android.arch.lifecycle:compiler:" + "$architecture_version"
-    //kapt
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:$room_version"
+
+
+
+    //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
 
@@ -90,6 +90,5 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-
 
 }

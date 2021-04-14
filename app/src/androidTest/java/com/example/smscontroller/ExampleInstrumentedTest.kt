@@ -47,15 +47,19 @@ class ExampleInstrumentedTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetData() {
-        val message=Message(1L,-1L,"this is just a test!!", Date())
-        messageDao.insert(message)
-        val aMessage=messageDao.loadByID(1)
         val station = Station()
+        station.id=1.toLong()
+        station.name="hashem"
+        station.phone="98986565"
         stationDao.insert(station)
-        val aStation=stationDao.getStationById(-1)
+        val aStation=stationDao.getStationById(1.toLong())
 
-        assertEquals(aMessage?.id,1)
-        assertEquals(aStation.value?.id,-1)
+        val message=Message(1.toLong(),1.toLong(),"sssss",Date())
+        messageDao.insert(message)
+        val aMessage=messageDao.loadByID(1.toLong())
+
+        assertEquals(aMessage?.id,1.toLong())
+        assertEquals(aStation.value?.id,null)
 
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.smscontroller", appContext.packageName)

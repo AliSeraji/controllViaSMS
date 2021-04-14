@@ -8,8 +8,6 @@ import androidx.room.PrimaryKey
 data class Station(
     @PrimaryKey(autoGenerate = true)
     var id:Long? = null,
-    @ColumnInfo(name = "station_name")
     var name:String = "",
-    @ColumnInfo(name = "station_phone")
     var phone:String = ""
 )
