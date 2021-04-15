@@ -13,10 +13,10 @@ interface StationDao {
     suspend fun insert(station: Station): Long?
 
     @Query("SELECT * FROM stations")
-    suspend fun loadAll(): LiveData<List<Station>>
+    fun loadAll(): LiveData<List<Station>>
 
     @Query("select * from stations where id=:findId")
-    suspend fun getStationById(findId:Long?):LiveData<Station>
+    fun getStationById(findId:Long?):LiveData<Station>
 
     @Query("DELETE FROM stations")
     suspend fun clear()

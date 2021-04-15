@@ -1,9 +1,6 @@
 package com.example.smscontroller.databaseModel
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.util.*
 
 @Entity(
@@ -15,7 +12,10 @@ import java.util.*
             childColumns = arrayOf("station_id"),
             onDelete = ForeignKey.CASCADE
         )
-    )
+    ),
+    indices = [
+        Index("station_id")
+    ]
 )
 data class  Message(
     @PrimaryKey(autoGenerate = true)

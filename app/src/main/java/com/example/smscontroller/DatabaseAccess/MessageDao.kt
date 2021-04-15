@@ -13,13 +13,13 @@ interface MessageDao {
     suspend fun insert(message: Message):Long?
 
     @Query("SELECT * FROM messages")
-    suspend fun loadAll(): LiveData<List<Message>>
+    fun loadAll(): LiveData<List<Message>>
 
     @Query("SELECT * FROM messages WHERE  id =  :messageID")
-    suspend fun loadByID(messageID:Long?):Message?
+    suspend fun loadByID(messageID:Long?):Message
 
     @Query("SELECT * FROM messages WHERE station_id=:stationID")
-    suspend fun loadAllFromStation(stationID:Long?): LiveData<List<Message>>
+    fun loadAllFromStation(stationID:Long?): LiveData<List<Message>>
 
     @Query("DELETE FROM messages")
     suspend fun clear()

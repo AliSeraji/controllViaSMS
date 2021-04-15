@@ -3,12 +3,122 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SplahsActivity">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".35"
+            android:id="@+id/h1"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".65"
+            android:id="@+id/h2"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/v1"
+            app:layout_constraintGuide_percent=".3"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/v3"
+            app:layout_constraintGuide_percent=".4"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/v4"
+            app:layout_constraintGuide_percent=".5"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/v5"
+            app:layout_constraintGuide_percent=".6"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/v2"
+            app:layout_constraintGuide_percent=".7"
+            />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/v1"
+            app:layout_constraintTop_toTopOf="@id/h1"
+            app:layout_constraintBottom_toBottomOf="@id/h2"
+            app:layout_constraintEnd_toEndOf="@id/v2"
+            android:src="@drawable/ic_wifi"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/v1"
+            app:layout_constraintTop_toBottomOf="@id/h2"
+            app:layout_constraintEnd_toEndOf="@id/v3"
+            android:src="@drawable/ic_home"
+
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/v3"
+            app:layout_constraintEnd_toEndOf="@id/v4"
+            app:layout_constraintTop_toBottomOf="@id/h2"
+            android:src="@drawable/ic_factory__1_"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/v4"
+            app:layout_constraintEnd_toEndOf="@id/v5"
+            app:layout_constraintTop_toBottomOf="@id/h2"
+            android:src="@drawable/ic_engineer"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/v5"
+            app:layout_constraintEnd_toEndOf="@id/v2"
+            app:layout_constraintTop_toBottomOf="@id/h2"
+            android:src="@drawable/ic_barn"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

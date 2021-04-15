@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SMSController</string>
+    <string name="test">TEST</string>
 </resources>
