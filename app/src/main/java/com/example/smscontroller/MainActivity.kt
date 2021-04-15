@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         forceRTL()
+        //supportActionBar?.hide()
         setApplicationLocale("fa")
         binding=DataBindingUtil.setContentView(this, R.layout.activity_main2)
 

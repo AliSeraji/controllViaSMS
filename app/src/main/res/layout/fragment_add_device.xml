@@ -2,22 +2,18 @@
 
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Fragments.AddDeviceFragment">
 
-    <androidx.fragment.app.FragmentContainerView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/user_login_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        tools:layout="@layout/fragment_controller"
-        app:navGraph="@navigation/controller_navigator"
+        android:text="@string/hello_blank_fragment"
+        android:gravity="center"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

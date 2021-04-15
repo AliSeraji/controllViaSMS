@@ -2,23 +2,25 @@
 
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Fragments.ControllerFragment">
 
-    <androidx.fragment.app.FragmentContainerView
+
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/user_login_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
-        tools:layout="@layout/fragment_controller"
-        app:navGraph="@navigation/controller_navigator"
+        android:gravity="center"
+        android:text="@string/test"
+        android:textSize="30sp"
         />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

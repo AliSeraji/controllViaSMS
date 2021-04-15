@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="30sp"
+        android:gravity="start|center"
+        android:id="@+id/device_name"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/device_name"
+        android:textSize="26sp"
+        android:id="@+id/device_quantity"
+        android:gravity="start|center"
+        />
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
