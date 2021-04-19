@@ -7,8 +7,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.constraintlayout.widget.Guideline
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_v1"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".15"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_v2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".85"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_v1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/device_quantity"
+        android:id="@+id/get_device_details"
+        android:src="@drawable/ic_more"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/item_v2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/device_quantity"
+        android:id="@+id/get_device_quantity"
+        android:src="@drawable/ic_refreshing"
+        />
+
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="@id/item_v1"
+        app:layout_constraintEnd_toEndOf="@id/item_v2"
         android:layout_height="match_parent"
         android:textSize="30sp"
         android:gravity="start|center"
@@ -16,18 +61,15 @@
         />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="@id/item_v1"
+        app:layout_constraintEnd_toEndOf="@id/item_v2"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/device_name"
         android:textSize="26sp"
         android:id="@+id/device_quantity"
         android:gravity="start|center"
         />
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

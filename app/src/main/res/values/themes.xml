@@ -21,4 +21,24 @@
         <item name="title">@string/app_name</item>
     </style>
 
+    <style name="textInputLabel" parent="Theme.MaterialComponents">
+       <item name="boxBackgroundColor">@color/light_black</item>
+       <item name="android:textColorHint">@color/gray</item>
+       <item name="boxStrokeColor">@color/light_black</item>
+    </style>
+
+    <style name="textInputStyle" parent="Theme.MaterialComponents">
+        <!-- Customize your theme here. -->
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/light_black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="floatingBtnStyle" parent="Theme.MaterialComponents">
+        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="rippleColor">?attr/colorOnPrimary</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+
 </resources>

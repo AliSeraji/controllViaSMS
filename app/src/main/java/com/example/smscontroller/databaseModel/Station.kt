@@ -9,5 +9,6 @@ data class Station(
     @PrimaryKey(autoGenerate = true)
     var id:Long? = null,
     var name:String = "",
-    var phone:String = ""
+    var phone:String = "",
+    var requestDataText:String=""
 )

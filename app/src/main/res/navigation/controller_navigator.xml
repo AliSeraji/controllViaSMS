@@ -3,19 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/controller_navigator"
-    app:startDestination="@id/addDeviceFragment">
+    app:startDestination="@id/controllerFragment">
 
-    <fragment
-        android:id="@+id/addDeviceFragment"
-        android:name="com.example.smscontroller.Fragments.AddDeviceFragment"
-        android:label="fragment_add_device"
-        tools:layout="@layout/fragment_add_device" >
-        <action
-            android:id="@+id/action_addDeviceFragment_to_controllerFragment"
-            app:destination="@id/controllerFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
-    </fragment>
+
+
     <fragment
         android:id="@+id/controllerFragment"
         android:name="com.example.smscontroller.Fragments.ControllerFragment"
@@ -28,4 +19,17 @@
             app:enterAnim="@android:anim/slide_out_right"
             app:exitAnim="@android:anim/slide_in_left" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addDeviceFragment"
+        android:name="com.example.smscontroller.Fragments.AddDeviceFragment"
+        android:label="fragment_add_device"
+        tools:layout="@layout/fragment_add_device" >
+        <action
+            android:id="@+id/action_addDeviceFragment_to_controllerFragment"
+            app:destination="@id/controllerFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
 </navigation>
