@@ -30,7 +30,7 @@
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintGuide_percent=".2"
+            app:layout_constraintGuide_percent=".15"
             android:orientation="horizontal"
             android:id="@+id/h1"
             />
@@ -38,7 +38,7 @@
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintGuide_percent=".4"
+            app:layout_constraintGuide_percent=".25"
             android:orientation="horizontal"
             android:id="@+id/h2"
             />
@@ -46,7 +46,7 @@
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintGuide_percent=".6"
+            app:layout_constraintGuide_percent=".35"
             android:orientation="horizontal"
             android:id="@+id/h3"
             />
@@ -54,7 +54,7 @@
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintGuide_percent=".8"
+            app:layout_constraintGuide_percent=".45"
             android:orientation="horizontal"
             android:id="@+id/h4"
             />
@@ -62,10 +62,28 @@
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintGuide_percent=".9"
+            app:layout_constraintGuide_percent=".52"
             android:orientation="horizontal"
             android:id="@+id/h5"
             />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent=".59"
+            android:orientation="horizontal"
+            android:id="@+id/h6"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent=".66"
+            android:orientation="horizontal"
+            android:id="@+id/h7"
+            />
+
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
@@ -140,16 +158,69 @@
             app:layout_constraintEnd_toEndOf="@id/v2"
             android:textAlignment="center"
             android:foregroundGravity="center"
-            app:lb_textColor="?attr/colorOnPrimary"
+            app:lb_textColor="@color/white"
+            app:lb_btnColor="?attr/colorPrimaryVariant"
+            app:lb_cornerRadius="15dp"
+            app:lb_rippleEnable="true"
+            app:lb_btnRippleAlpha="10"
+            app:lb_btnRippleColor="?attr/colorOnPrimary"
+            app:lb_btnText="@string/Submit"
+            android:id="@+id/submit"
+            />
+
+
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/h5"
+            app:layout_constraintBottom_toTopOf="@id/h6"
+            app:layout_constraintStart_toStartOf="@id/v1"
+            app:layout_constraintEnd_toEndOf="@id/v2"
+            android:textAlignment="center"
+            android:foregroundGravity="center"
+            app:lb_textColor="@color/white"
             app:lb_btnColor="?attr/colorPrimaryVariant"
             android:stateListAnimator="@null"
             app:lb_cornerRadius="15dp"
             app:lb_rippleEnable="true"
             app:lb_btnRippleAlpha="10"
             app:lb_btnRippleColor="?attr/colorOnPrimary"
-            app:lb_btnText="@string/Submit"
+            app:lb_btnText="@string/back"
+            android:id="@+id/return_back"
             />
 
+        <com.dx.dxloadingbutton.lib.LoadingButton
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/h6"
+            app:layout_constraintBottom_toTopOf="@id/h7"
+            app:layout_constraintStart_toStartOf="@id/v1"
+            app:layout_constraintEnd_toEndOf="@id/v2"
+            android:textAlignment="center"
+            android:foregroundGravity="center"
+            app:lb_textColor="@color/white"
+            app:lb_btnColor="?attr/colorPrimaryVariant"
+            android:stateListAnimator="@null"
+            app:lb_cornerRadius="15dp"
+            app:lb_rippleEnable="true"
+            app:lb_btnRippleAlpha="10"
+            app:lb_btnRippleColor="?attr/colorOnPrimary"
+            app:lb_btnText="@string/clear_all_data"
+            android:id="@+id/clear"
+            />
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHeight_percent=".065"
+            android:text="@string/add_device"
+            android:gravity="center"
+            style="@style/customActionbar"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,16 @@
     <string name="app_name">SMSController</string>
     <string name="test">TEST</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="station_number_95632147">Station Number 95632147</string>
+
+    <string name="station_number_95632147">Station Number +98…</string>
     <string name="station_name">Station Name</string>
     <string name="station_request_info_text">Station request info text</string>
     <string name="Submit">Submit</string>
+    <string name="add_device">Add Device</string>
+    <string name="back">Return</string>
+    <string name="clear_all_data">Clear All Data</string>
+    <string name="fill_all_fields">All fields should be filled.</string>
+    <string name="success">Operation is successful.</string>
+    <string name="data_clear_warning">All Data is cleared.</string>
 </resources>

@@ -5,6 +5,7 @@ import android.app.Application
 import com.example.smscontroller.databaseModel.Message
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.smscontroller.DatabaseAccess.MessageDao
 import com.example.smscontroller.DatabaseAccess.StationDao
@@ -63,6 +64,10 @@ class SMSViewModel(private val messageDao:MessageDao
             allStations=stationDao.loadAll()
     }
 
+    fun getDataForObservation():LiveData<List<Station>>{
+        return allStations
+    }
+
     private fun getStationMessage(stationID:Long){
             allMessagesOfAStation=messageDao.loadAllFromStation(stationID)
     }
@@ -71,6 +76,14 @@ class SMSViewModel(private val messageDao:MessageDao
         viewModelScope.launch {
             clear()
         }
+    }
+
+    fun getStationById(id:Long?):LiveData<Station>{
+        return stationDao.getStationById(id)
+    }
+
+    fun createStation():Station{
+        return Station()
     }
 
     private suspend fun clear() {

@@ -2,8 +2,14 @@
 <resources>
     <string name="app_name">کنترل هوشمند</string>
     <string name="test">تست</string>
-    <string name="station_number_95632147">شماره تلفن دستگاه 95364458</string>
+    <string name="station_number_95632147">شماره تلفن دستگاه …98+</string>
     <string name="station_name">نام دستگاه</string>
     <string name="Submit">ثبت</string>
     <string name="station_request_info_text">متن درخواست اطلاعات از دستگاه</string>
+    <string name="add_device">اضافه کردن دستگاه</string>
+    <string name="back">بازگشت</string>
+    <string name="clear_all_data">پاک کردن حافظه</string>
+    <string name="fill_all_fields">پرکردن تمامی فیلد ها الزامی است.</string>
+    <string name="success">عملیات موفق بود.</string>
+    <string name="data_clear_warning">تمامی داده ها پاک شدند.</string>
 </resources>

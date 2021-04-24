@@ -60,7 +60,6 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
 
             binding.deviceName.text=item.name
 
-
             binding.getDeviceDetails.setOnClickListener {
                 clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.id)
             }

@@ -21,6 +21,7 @@ class SplahsActivity : AppCompatActivity() {
         val intent= Intent(this,MainActivity::class.java)
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(intent)
+            finish()
         }, 1500)
     }
 

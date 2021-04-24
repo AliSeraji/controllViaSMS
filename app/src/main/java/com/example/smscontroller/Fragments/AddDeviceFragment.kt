@@ -1,17 +1,19 @@
 package com.example.smscontroller.Fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.smscontroller.DatabaseAccess.DatabaseOperator
+import androidx.navigation.findNavController
 import com.example.smscontroller.R
 import com.example.smscontroller.SMSViewModel
-import com.example.smscontroller.SMSViewModelFactory
 import com.example.smscontroller.databinding.FragmentAddDeviceBinding
 import kotlinx.coroutines.launch
 
@@ -42,17 +44,59 @@ class AddDeviceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             init()
         }
     }
 
-    private fun init(){
-        val application= requireNotNull(this.activity).application
-        val dataSource= DatabaseOperator.getInstance(application)
-        val viewModelFactory=
-            SMSViewModelFactory(dataSource.messageDao,dataSource.stationDao,application)
-        viewModel= ViewModelProvider(this,viewModelFactory).get(SMSViewModel::class.java)
+    private suspend fun init(){
+        viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
+
+
+        binding.returnBack.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_addDeviceFragment_to_controllerFragment)
+        }
+
+        binding.submit.setOnClickListener {
+            binding.submit.startLoading()
+            binding.submit.isEnabled=false
+            binding.submit.resetAfterFailed=true
+            if(binding.stationNumberInput.text.toString().trim().isNotEmpty() ||
+                    binding.stationNumberInput.text.toString().trim().isBlank()
+                    and binding.stationNumberInput.text.toString().trim().isNotEmpty()||
+                    binding.stationNumberInput.text.toString().trim().isNotBlank()
+                    and binding.stationRequestInput.text.toString().trim().isNotEmpty()||
+                    binding.stationRequestInput.text.toString().trim().isNotBlank()
+                    ){
+                val station=viewModel.createStation()
+                station.name=binding.stationNameInput.text.toString()
+                station.phone=binding.stationNumberInput.text.toString()
+                station.requestDataText=binding.stationRequestInput.text.toString()
+                viewModel.insertStation(station)
+                Toast.makeText(requireContext(),R.string.success,Toast.LENGTH_LONG).show()
+                binding.stationNameInput.text!!.clear()
+                binding.stationNumberInput.text!!.clear()
+                binding.stationRequestInput.text!!.clear()
+                binding.submit.loadingSuccessful()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.submit.isEnabled=true
+                    binding.submit.reset()
+                }, 1500)
+
+            }
+            else{
+                Toast.makeText(requireContext(),R.string.fill_all_fields,Toast.LENGTH_LONG).show()
+                binding.submit.loadingFailed()
+            }
+            binding.submit.isEnabled=true
+            binding.submit.reset()
+        }
+
+        binding.clear.setOnClickListener {
+            viewModel.clearDatabase()
+            Toast.makeText(requireContext(),R.string.data_clear_warning,Toast.LENGTH_LONG).show()
+        }
+
     }
 
     companion object {

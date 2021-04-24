@@ -16,8 +16,8 @@
         <action
             android:id="@+id/action_controllerFragment_to_addDeviceFragment"
             app:destination="@id/addDeviceFragment"
-            app:enterAnim="@android:anim/slide_out_right"
-            app:exitAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@anim/anim_slide_in_left"
+            app:exitAnim="@anim/anim_slide_out_left" />
     </fragment>
 
     <fragment
@@ -28,8 +28,8 @@
         <action
             android:id="@+id/action_addDeviceFragment_to_controllerFragment"
             app:destination="@id/controllerFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/anim_slide_in_right"
+            app:exitAnim="@anim/anim_slide_out_right" />
     </fragment>
 
 </navigation>

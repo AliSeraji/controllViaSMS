@@ -6,11 +6,19 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dark_brown">#272727</color>
 
-    <color name="light_black">#151515</color>
+    <color name="light_black">#222831</color>
+    <color name="orange">#fd7014</color>
+    <color name="light_brown">#393e46</color>
+    <color name="white_aqua">#eeeeee</color>
+
+
     <color name="dark_purple">#301b3f</color>
     <color name="mid_purple">#3c415c</color>
     <color name="gray">#b4a5a5</color>
 
+
+    
+    
     <color name="blue">#0061a8</color>
     <color name="mid_blue">#2978b5</color>
     <color name="light_blue">#8ab6d6</color>
