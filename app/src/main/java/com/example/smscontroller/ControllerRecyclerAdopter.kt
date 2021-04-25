@@ -61,10 +61,10 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
             binding.deviceName.text=item.name
 
             binding.getDeviceDetails.setOnClickListener {
-                clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.id)
+                clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.id!!)
             }
             binding.getDeviceQuantity.setOnClickListener {
-                clickListener.onRefreshClick(absoluteAdapterPosition,item.id,binding.deviceQuantity)
+                clickListener.onRefreshClick(absoluteAdapterPosition,item.id!!,binding.deviceQuantity)
             }
             binding.executePendingBindings()
         }

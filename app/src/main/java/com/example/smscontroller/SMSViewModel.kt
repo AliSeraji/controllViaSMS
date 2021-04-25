@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smscontroller.DatabaseAccess.MessageDao
 import com.example.smscontroller.DatabaseAccess.StationDao
 import com.example.smscontroller.databaseModel.Station
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SMSViewModel(private val messageDao:MessageDao
@@ -78,7 +79,7 @@ class SMSViewModel(private val messageDao:MessageDao
         }
     }
 
-    fun getStationById(id:Long?):LiveData<Station>{
+    fun getStationById(id:Long?):LiveData<Station?>{
         return stationDao.getStationById(id)
     }
 

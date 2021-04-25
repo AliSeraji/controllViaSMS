@@ -4,9 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
-import android.telephony.SmsMessage
+import android.provider.Telephony
+import android.telephony.SmsManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +60,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
 
     private fun init(){
+        //receiveSMS()
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
         recyclerView=ControllerRecyclerAdopter(this)
         binding.deviceRecyclerView.adapter=recyclerView
@@ -68,6 +69,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                 recyclerView.addViewSubmitList(it)
             }
         })
+
     }
 
     private fun events(){
@@ -84,14 +86,20 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
-            }
+        }
     }
 
 
 
     override fun onRefreshClick(pos: Int, id: Long?, textView: TextView) {
 
+        viewModel.getStationById(id).observe(viewLifecycleOwner,{
+            Toast.makeText(requireContext(),it!!.phone,Toast.LENGTH_LONG).show()
+        })
 
+
+        //sendSMS(viewModel.getStationById(id).value!!.phone,viewModel.getStationById(id).value!!.requestDataText)
+        //receiveSMS()
     }
 
     override fun onMoreDetailsClick(pos: Int, id: Long?) {
@@ -99,5 +107,20 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     }
 
 
+    private fun sendSMS(deviceNo:String,text:String){
+        val sms=SmsManager.getDefault()
+        sms.sendTextMessage(deviceNo,"ourControllerApp",text,null,null)
+    }
+
+    private fun receiveSMS(){
+        var br=object:BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                for(sms in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
+                    Toast.makeText(requireContext(),sms.displayMessageBody,Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        requireActivity().registerReceiver(br,IntentFilter("android.provider.Telephony.SMS_RECEIVED"))
+    }
 }
 

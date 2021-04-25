@@ -1,6 +1,7 @@
 package com.example.smscontroller.DatabaseAccess
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -16,7 +17,7 @@ interface StationDao {
     fun loadAll(): LiveData<List<Station>>
 
     @Query("select * from stations where id=:findId")
-    fun getStationById(findId:Long?):LiveData<Station>
+    fun getStationById(findId:Long?):LiveData<Station?>
 
     @Query("DELETE FROM stations")
     suspend fun clear()

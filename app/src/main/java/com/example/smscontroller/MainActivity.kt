@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         setApplicationLocale("fa")
         binding=DataBindingUtil.setContentView(this, R.layout.activity_main2)
         init()
+
     }
 
     private fun init(){
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 requestMultiplePermissions()
             }
         }
+
     }
 
     private fun forceRTL(){
