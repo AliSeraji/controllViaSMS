@@ -60,7 +60,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
 
     private fun init(){
-        //receiveSMS()
+        receiveSMS()
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
         recyclerView=ControllerRecyclerAdopter(this)
         binding.deviceRecyclerView.adapter=recyclerView
@@ -94,11 +94,10 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     override fun onRefreshClick(pos: Int, id: Long?, textView: TextView) {
 
         viewModel.getStationById(id).observe(viewLifecycleOwner,{
-            Toast.makeText(requireContext(),it!!.phone,Toast.LENGTH_LONG).show()
+            sendSMS(it!!.phone,it.requestDataText)
+            Toast.makeText(requireContext(),it.phone,Toast.LENGTH_LONG).show()
+
         })
-
-
-        //sendSMS(viewModel.getStationById(id).value!!.phone,viewModel.getStationById(id).value!!.requestDataText)
         //receiveSMS()
     }
 
@@ -113,6 +112,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     }
 
     private fun receiveSMS(){
+        var msg:String?=null
         var br=object:BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 for(sms in Telephony.Sms.Intents.getMessagesFromIntent(intent)){
