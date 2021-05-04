@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="messages_tab">پیام ها</string>
     <string name="app_name">کنترل هوشمند</string>
     <string name="test">تست</string>
     <string name="station_number_95632147">شماره تلفن دستگاه …98+</string>
@@ -12,4 +13,9 @@
     <string name="fill_all_fields">پرکردن تمامی فیلد ها الزامی است.</string>
     <string name="success">عملیات موفق بود.</string>
     <string name="data_clear_warning">تمامی داده ها پاک شدند.</string>
+    <string name="sms_sent">پیامک ارسال شد.</string>
+    <string name="quantity">مقدار :%1$s</string>
+    <string name="date">تاریخ:%1$s</string>
+    <string name="message_text">متن پیام/n %1$s </string>
+
 </resources>

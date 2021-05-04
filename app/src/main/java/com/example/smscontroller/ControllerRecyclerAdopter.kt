@@ -1,29 +1,28 @@
 package com.example.smscontroller
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.ControllerItemBinding
-import com.example.smscontroller.databinding.FragmentAddDeviceBinding
 import kotlinx.coroutines.*
 import java.lang.ClassCastException
 
 
 private val ITEM_VIEW_TYPE_ITEM = 1
 
-class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListener):ListAdapter<ControllerRecyclerAdopter.DataItem,RecyclerView.ViewHolder>(AdopterDataDiffCallback()){
+class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecyclerItemClickListener, onFormatTextListener:OnRecyclerItemFormatTextListener):ListAdapter<ControllerRecyclerAdopter.DataItem,RecyclerView.ViewHolder>(AdopterDataDiffCallback()){
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     private val mOnItemClickListener=onItemClickListener
-
-    fun addViewSubmitList(list:List<Station>?){
+    private val mContext=context
+    private val mOnRecyclerItemFormatTextListener=onFormatTextListener
+    fun addViewSubmitList(list:List<MainData>?){
         adapterScope.launch {
             val items=when(list){
                 null-> listOf(null)
@@ -33,7 +32,6 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
                     submitList(items)
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,7 +45,7 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
             when(holder){
                 is ControllerItemHolder->{
                     val item=getItem(position) as DataItem.ControllerItem
-                    holder.bind(item.stationItem,mOnItemClickListener)
+                    holder.bind(mContext,item.data,mOnItemClickListener,mOnRecyclerItemFormatTextListener)
                 }
             }
     }
@@ -55,16 +53,18 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
 
     class ControllerItemHolder(val binding: ControllerItemBinding):RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item:Station,clickListener: OnRecyclerItemClickListener){
+        fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener,formatTextListener: OnRecyclerItemFormatTextListener){
 
 
-            binding.deviceName.text=item.name
+            binding.deviceName.text=item.station.name
+
+            binding.deviceQuantity.text=context.getString(R.string.quantity,formatTextListener.onFormatText(item.message!!.text))
 
             binding.getDeviceDetails.setOnClickListener {
-                clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.id!!)
+                clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.station.id!!)
             }
             binding.getDeviceQuantity.setOnClickListener {
-                clickListener.onRefreshClick(absoluteAdapterPosition,item.id!!,binding.deviceQuantity)
+                clickListener.onRefreshClick(absoluteAdapterPosition,item.station.id!!,binding.deviceQuantity)
             }
             binding.executePendingBindings()
         }
@@ -90,10 +90,14 @@ class ControllerRecyclerAdopter( onItemClickListener: OnRecyclerItemClickListene
         fun onMoreDetailsClick(pos:Int,id:Long?)
     }
 
+    interface OnRecyclerItemFormatTextListener{
+        fun onFormatText(text:String?):String
+    }
+
     sealed class DataItem{
         abstract val id:Long?
-        data class ControllerItem(val stationItem :Station):DataItem(){
-            override val id=stationItem.id
+        data class ControllerItem(val data :MainData):DataItem(){
+            override val id=data.station.id
         }
     }
 

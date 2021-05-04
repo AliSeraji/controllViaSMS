@@ -46,5 +46,13 @@
         <item name="android:textColor">@color/creme</item>
     </style>
 
+    <style name="recyclerItem" parent="Theme.MaterialComponents">
+        <item name="android:background">#f2f2f2</item>
+    </style>
+
+    <style name="message_item_style" parent="Theme.MaterialComponents">
+        <item name="android:color">#f2f2f2</item>
+    </style>
+
 
 </resources>

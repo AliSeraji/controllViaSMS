@@ -1,32 +1,45 @@
 package com.example.smscontroller
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.smscontroller.DatabaseAccess.DatabaseOperator
+import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.ActivityMain2Binding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
+import java.util.logging.Handler
+import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMain2Binding
     private lateinit var viewModel: SMSViewModel
+    private var doubleBackToExitPressedOnce = false
 
     private val permissions = arrayOf(
         Manifest.permission.SEND_SMS,
         Manifest.permission.READ_PHONE_STATE,
         Manifest.permission.RECEIVE_SMS
     )
+
+    companion object{
+        var stationPhoneNumbers=ArrayList<String?>()
+        var allStations:MutableList<Station> = mutableListOf()
+        var isActivityOpen:Boolean=true
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,16 +52,36 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun init(){
+    private fun setUpViewModel(){
         val application= requireNotNull(this).application
         val dataSource= DatabaseOperator.getInstance(application)
-        val viewModelFactory=SMSViewModelFactory(dataSource.messageDao,dataSource.stationDao,application)
-        viewModel= ViewModelProvider(this,viewModelFactory).get(SMSViewModel::class.java)
+        val viewModelFactory=SMSViewModelFactory(
+            dataSource.messageDao,
+            dataSource.stationDao,
+            application
+        )
+        viewModel= ViewModelProvider(this, viewModelFactory).get(SMSViewModel::class.java)
+        SMSViewModel.viewModelStatic=viewModel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!arePermission()) {
                 requestMultiplePermissions()
             }
         }
+
+
+    }
+
+    private fun init(){
+        setUpViewModel()
+
+        viewModel.getAllStationsToObserve().observe(this, {
+            this.lifecycleScope.launch(Dispatchers.IO) {
+                for (station in it) {
+                    allStations.add(station)
+                    stationPhoneNumbers.add(station.phone)
+                }
+            }
+        })
 
     }
 
@@ -111,6 +144,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        isActivityOpen=true
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isActivityOpen=false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActivityOpen=false
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        isActivityOpen=false
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isActivityOpen=true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isActivityOpen=false
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            isActivityOpen=true
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+
+        android.os.Handler(Looper.getMainLooper()).postDelayed({
+            doubleBackToExitPressedOnce = false
+            isActivityOpen=false
+        }, 2000)
+
+    }
 
 }

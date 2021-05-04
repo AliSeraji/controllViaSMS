@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">SMSController</string>
     <string name="test">TEST</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
 
+    <string name="messages_tab">Messages</string>
     <string name="station_number_95632147">Station Number +98…</string>
     <string name="station_name">Station Name</string>
     <string name="station_request_info_text">Station request info text</string>
@@ -14,4 +14,9 @@
     <string name="fill_all_fields">All fields should be filled.</string>
     <string name="success">Operation is successful.</string>
     <string name="data_clear_warning">All Data is cleared.</string>
+    <string name="sms_sent">SMS has been sent.</string>
+    <string name="quantity">Quantity :%1$s</string>
+    <string name="date">Date:%1$s</string>
+    <string name="message_text">Text /n %1$s</string>
+
 </resources>

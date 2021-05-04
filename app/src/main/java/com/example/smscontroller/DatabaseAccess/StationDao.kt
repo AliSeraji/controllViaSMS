@@ -19,6 +19,12 @@ interface StationDao {
     @Query("select * from stations where id=:findId")
     fun getStationById(findId:Long?):LiveData<Station?>
 
+    @Query("select * from stations where phone=:phoneNumber")
+    fun getStationByPhone(phoneNumber:String):LiveData<List<Station>>
+
+    @Query("select phone from stations")
+    fun getAllPhoneNo():LiveData<List<String?>>
+
     @Query("DELETE FROM stations")
     suspend fun clear()
 }

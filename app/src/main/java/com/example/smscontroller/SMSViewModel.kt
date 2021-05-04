@@ -2,30 +2,41 @@ package com.example.smscontroller
 
 
 import android.app.Application
+import androidx.lifecycle.*
 import com.example.smscontroller.databaseModel.Message
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.smscontroller.DatabaseAccess.MessageDao
 import com.example.smscontroller.DatabaseAccess.StationDao
 import com.example.smscontroller.databaseModel.Station
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class SMSViewModel(private val messageDao:MessageDao
                     ,private val stationDao: StationDao
                     ,application:Application)
                     :AndroidViewModel(application){
 
+    private lateinit var allData:LiveData<List<MainData>>
     private lateinit var allMessages:LiveData<List<Message>>
     private lateinit var allStations:LiveData<List<Station>>
     private lateinit var allMessagesOfAStation:LiveData<List<Message>>
+    private lateinit var allLastMessages:LiveData<List<Message>>
+    private lateinit var allPhoneNo:LiveData<List<String?>>
+
+    companion object{
+        var viewModelStatic:SMSViewModel? =null
+    }
 
     init {
         viewModelScope.launch {
             getAllStations()
+            getAllLastMessages()
             getAllMessages()
+            retAllPhoneNo()
+            prepareData()
         }
     }
 
@@ -41,10 +52,12 @@ class SMSViewModel(private val messageDao:MessageDao
         }
     }
 
-    fun getAllMessagesOfAStation(id:Long):LiveData<List<Message>>{
-        viewModelScope.launch {
-            getStationMessage(id)
-        }
+    private fun getAllLastMessages(){
+        allLastMessages=messageDao.loadAllLastMessages()
+    }
+
+    fun getAllMessagesOfAStation(id:Long?):LiveData<List<Message>>{
+        getStationMessage(id)
         return allMessagesOfAStation
     }
 
@@ -62,14 +75,18 @@ class SMSViewModel(private val messageDao:MessageDao
     }
 
     private fun getAllStations(){
-            allStations=stationDao.loadAll()
+        allStations=stationDao.loadAll()
     }
 
-    fun getDataForObservation():LiveData<List<Station>>{
+    fun getAllStationsToObserve():LiveData<List<Station>>{
         return allStations
     }
 
-    private fun getStationMessage(stationID:Long){
+    fun getDataForObservation():LiveData<List<MainData>>{
+        return allData
+    }
+
+    private fun getStationMessage(stationID:Long?){
             allMessagesOfAStation=messageDao.loadAllFromStation(stationID)
     }
 
@@ -83,12 +100,45 @@ class SMSViewModel(private val messageDao:MessageDao
         return stationDao.getStationById(id)
     }
 
+    private fun retAllPhoneNo(){
+        allPhoneNo=stationDao.getAllPhoneNo()
+    }
+
+    fun getAllPhoneNo():LiveData<List<String?>>{
+        return allPhoneNo
+    }
+
+    private suspend fun prepareData(){
+            allData = MediatorLiveData<List<MainData>>().apply {
+                fun update() {
+                    val stations = allStations.value ?: return
+                    val messages=allMessages.value?:return
+                    val data = ArrayList<MainData>()
+                    for (index in stations.indices) {
+                        if (messages.isEmpty())
+                            data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
+                        else
+                            data.add(MainData(stations[index],messages[messages.size-1]))
+                    }
+                    value = data
+                }
+                addSource(allStations) {update()}
+                addSource(allMessages){update()}
+                update()
+            }
+
+    }
+
+    private fun getLastMessageOfStation(id:Long?):LiveData<Message>{
+        return messageDao.loadLastMessageOfEachStation(id)
+    }
+
     fun createStation():Station{
         return Station()
     }
 
     private suspend fun clear() {
-        messageDao.clear()
         stationDao.clear()
+        messageDao.clear()
     }
 }

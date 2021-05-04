@@ -17,7 +17,8 @@ import java.util.*
         Index("station_id")
     ]
 )
-data class  Message(
+
+data class Message(
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null,
     @ColumnInfo(name = "station_id")

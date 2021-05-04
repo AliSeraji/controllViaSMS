@@ -5,8 +5,6 @@
     android:id="@+id/controller_navigator"
     app:startDestination="@id/controllerFragment">
 
-
-
     <fragment
         android:id="@+id/controllerFragment"
         android:name="com.example.smscontroller.Fragments.ControllerFragment"
@@ -18,6 +16,9 @@
             app:destination="@id/addDeviceFragment"
             app:enterAnim="@anim/anim_slide_in_left"
             app:exitAnim="@anim/anim_slide_out_left" />
+        <action
+            android:id="@+id/action_controllerFragment_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
     </fragment>
 
     <fragment
@@ -30,6 +31,21 @@
             app:destination="@id/controllerFragment"
             app:enterAnim="@anim/anim_slide_in_right"
             app:exitAnim="@anim/anim_slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.example.smscontroller.Fragments.MessagesFragment"
+        android:label="MessagesFragment"
+        tools:layout="@layout/fragment_messages"
+        >
+
+        <action
+            android:id="@+id/action_messagesFragment_to_controllerFragment"
+            app:destination="@id/controllerFragment" />
+        <argument
+            android:name="stationId"
+            app:argType="long"
+            android:defaultValue="@null" />
     </fragment>
 
 </navigation>

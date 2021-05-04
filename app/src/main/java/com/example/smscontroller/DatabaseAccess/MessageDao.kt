@@ -21,6 +21,12 @@ interface MessageDao {
     @Query("SELECT * FROM messages WHERE station_id=:stationID")
     fun loadAllFromStation(stationID:Long?): LiveData<List<Message>>
 
+    @Query("select * from (select * from messages where station_id=(select id from stations) order by id asc)")
+    fun loadAllLastMessages():LiveData<List<Message>>
+
+    @Query("select * from messages where id =:stationId order by id asc limit 1")
+    fun loadLastMessageOfEachStation(stationId:Long?):LiveData<Message>
+
     @Query("DELETE FROM messages")
     suspend fun clear()
 
