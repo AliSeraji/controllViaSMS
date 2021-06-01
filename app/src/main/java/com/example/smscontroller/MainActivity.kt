@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     companion object{
+        var stationPhysicalID=ArrayList<String>()
         var stationPhoneNumbers=ArrayList<String?>()
         var allStations:MutableList<Station> = mutableListOf()
         var isActivityOpen:Boolean=true
@@ -73,12 +74,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(){
         setUpViewModel()
-
         viewModel.getAllStationsToObserve().observe(this, {
             this.lifecycleScope.launch(Dispatchers.IO) {
                 for (station in it) {
                     allStations.add(station)
                     stationPhoneNumbers.add(station.phone)
+                    stationPhysicalID.add(station.physicalID)
                 }
             }
         })

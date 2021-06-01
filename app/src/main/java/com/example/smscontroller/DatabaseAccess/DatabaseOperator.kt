@@ -10,7 +10,7 @@ import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.databaseModel.Station
 
 
-@Database(entities = [Message::class,Station::class],version=1,exportSchema = false)
+@Database(entities = [Message::class,Station::class],version=2,exportSchema = false)
 @TypeConverters(Converters::class)
 
 abstract class DatabaseOperator:RoomDatabase() {
@@ -37,6 +37,4 @@ abstract class DatabaseOperator:RoomDatabase() {
             }
         }
     }
-
-
 }

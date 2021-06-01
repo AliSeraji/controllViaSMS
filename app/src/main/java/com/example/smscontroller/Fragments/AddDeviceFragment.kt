@@ -52,7 +52,6 @@ class AddDeviceFragment : Fragment() {
     private suspend fun init(){
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
 
-
         binding.returnBack.setOnClickListener {
             view?.findNavController()?.navigate(R.id.action_addDeviceFragment_to_controllerFragment)
         }
@@ -63,15 +62,18 @@ class AddDeviceFragment : Fragment() {
             binding.submit.resetAfterFailed=true
             if(binding.stationNumberInput.text.toString().trim().isNotEmpty() ||
                     binding.stationNumberInput.text.toString().trim().isBlank()
-                    and binding.stationNumberInput.text.toString().trim().isNotEmpty()||
+                    && binding.stationNumberInput.text.toString().trim().isNotEmpty()||
                     binding.stationNumberInput.text.toString().trim().isNotBlank()
-                    and binding.stationRequestInput.text.toString().trim().isNotEmpty()||
+                    && binding.stationRequestInput.text.toString().trim().isNotEmpty()||
                     binding.stationRequestInput.text.toString().trim().isNotBlank()
                     ){
                 val station=viewModel.createStation()
+
                 station.name=binding.stationNameInput.text.toString()
                 station.phone=binding.stationNumberInput.text.toString()
                 station.requestDataText=binding.stationRequestInput.text.toString()
+                station.physicalID=textFormatter(binding.stationRequestInput.text.toString())
+
                 viewModel.insertStation(station)
                 Toast.makeText(requireContext(),R.string.success,Toast.LENGTH_LONG).show()
                 binding.stationNameInput.text!!.clear()
@@ -99,6 +101,15 @@ class AddDeviceFragment : Fragment() {
 
     }
 
+
+    private fun textFormatter(string:String?):String{
+        if(string==null || string=="")
+            return ""
+        val str=string.split("?","(",")")
+        if(str.size<2)
+            return ""
+        return str[1]
+    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

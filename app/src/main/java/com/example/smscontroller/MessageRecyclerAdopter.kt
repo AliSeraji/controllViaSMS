@@ -52,7 +52,7 @@ class MessageRecyclerAdopter(context: Context) :ListAdapter<MessageRecyclerAdopt
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)){
-            is MessageRecyclerAdopter.DataItem-> ITEM_VIEW_TYPE
+            is DataItem-> ITEM_VIEW_TYPE
         }
     }
 

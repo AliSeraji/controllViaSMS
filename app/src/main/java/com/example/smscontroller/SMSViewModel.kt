@@ -2,6 +2,7 @@ package com.example.smscontroller
 
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.DatabaseAccess.MessageDao
@@ -20,6 +21,7 @@ class SMSViewModel(private val messageDao:MessageDao
                     :AndroidViewModel(application){
 
     private lateinit var allData:LiveData<List<MainData>>
+    private lateinit var monitoringData:LiveData<List<MainData>>
     private lateinit var allMessages:LiveData<List<Message>>
     private lateinit var allStations:LiveData<List<Station>>
     private lateinit var allMessagesOfAStation:LiveData<List<Message>>
@@ -36,7 +38,8 @@ class SMSViewModel(private val messageDao:MessageDao
             getAllLastMessages()
             getAllMessages()
             retAllPhoneNo()
-            prepareData()
+            //prepareData()
+            prepareDataForMonitoring()
         }
     }
 
@@ -86,6 +89,10 @@ class SMSViewModel(private val messageDao:MessageDao
         return allData
     }
 
+    fun getDataForMonitoring():LiveData<List<MainData>>{
+        return monitoringData
+    }
+
     private fun getStationMessage(stationID:Long?){
             allMessagesOfAStation=messageDao.loadAllFromStation(stationID)
     }
@@ -108,7 +115,7 @@ class SMSViewModel(private val messageDao:MessageDao
         return allPhoneNo
     }
 
-    private suspend fun prepareData(){
+    private fun prepareData(){
             allData = MediatorLiveData<List<MainData>>().apply {
                 fun update() {
                     val stations = allStations.value ?: return
@@ -126,6 +133,28 @@ class SMSViewModel(private val messageDao:MessageDao
                 addSource(allMessages){update()}
                 update()
             }
+    }
+
+    private fun prepareDataForMonitoring(){
+        monitoringData=MediatorLiveData<List<MainData>>().apply {
+            fun update() {
+                val stations = allStations.value ?: return
+                val messages=allMessages.value?:return
+                val data = ArrayList<MainData>()
+                for (index in stations.indices) {
+                    if (messages.isEmpty())
+                        data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
+                    else if(messages.isNotEmpty() && getLastMessageOfStation(stations[index].id).value!=null)
+                        data.add(MainData(stations[index],getLastMessageOfStation(stations[index].id).value))
+                    else
+                        data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
+                }
+                value = data
+            }
+            addSource(allStations) {update()}
+            addSource(allMessages){update()}
+            update()
+        }
 
     }
 

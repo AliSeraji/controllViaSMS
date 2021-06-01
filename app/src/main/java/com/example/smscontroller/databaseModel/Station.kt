@@ -10,5 +10,6 @@ data class Station(
     var id:Long? = null,
     var name:String = "",
     var phone:String = "",
-    var requestDataText:String=""
+    var requestDataText:String="",
+    var physicalID:String=""
 )

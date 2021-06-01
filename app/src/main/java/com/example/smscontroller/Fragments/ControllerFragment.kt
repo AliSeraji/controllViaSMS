@@ -62,7 +62,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
         recyclerView=ControllerRecyclerAdopter(requireContext(),this,this)
         binding.deviceRecyclerView.adapter=recyclerView
-        viewModel.getDataForObservation().observe(viewLifecycleOwner,{
+        viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
             it.let {
                 recyclerView.addViewSubmitList(it)
             }
