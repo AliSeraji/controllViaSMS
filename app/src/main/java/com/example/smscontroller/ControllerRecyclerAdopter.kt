@@ -75,7 +75,6 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                 val binding=ControllerItemBinding.inflate(layoutInflater,parent,false)
                 return ControllerItemHolder(binding)
             }
-
         }
     }
 

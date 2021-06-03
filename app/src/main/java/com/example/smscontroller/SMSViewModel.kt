@@ -2,15 +2,12 @@ package com.example.smscontroller
 
 
 import android.app.Application
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.DatabaseAccess.MessageDao
 import com.example.smscontroller.DatabaseAccess.StationDao
 import com.example.smscontroller.databaseModel.Station
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,7 +35,6 @@ class SMSViewModel(private val messageDao:MessageDao
             getAllLastMessages()
             getAllMessages()
             retAllPhoneNo()
-            //prepareData()
             prepareDataForMonitoring()
         }
     }
@@ -85,10 +81,6 @@ class SMSViewModel(private val messageDao:MessageDao
         return allStations
     }
 
-    fun getDataForObservation():LiveData<List<MainData>>{
-        return allData
-    }
-
     fun getDataForMonitoring():LiveData<List<MainData>>{
         return monitoringData
     }
@@ -115,26 +107,6 @@ class SMSViewModel(private val messageDao:MessageDao
         return allPhoneNo
     }
 
-    private fun prepareData(){
-            allData = MediatorLiveData<List<MainData>>().apply {
-                fun update() {
-                    val stations = allStations.value ?: return
-                    val messages=allMessages.value?:return
-                    val data = ArrayList<MainData>()
-                    for (index in stations.indices) {
-                        if (messages.isEmpty())
-                            data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
-                        else
-                            data.add(MainData(stations[index],messages[messages.size-1]))
-                    }
-                    value = data
-                }
-                addSource(allStations) {update()}
-                addSource(allMessages){update()}
-                update()
-            }
-    }
-
     private fun prepareDataForMonitoring(){
         monitoringData=MediatorLiveData<List<MainData>>().apply {
             fun update() {
@@ -144,10 +116,15 @@ class SMSViewModel(private val messageDao:MessageDao
                 for (index in stations.indices) {
                     if (messages.isEmpty())
                         data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
-                    else if(messages.isNotEmpty() && getLastMessageOfStation(stations[index].id).value!=null)
-                        data.add(MainData(stations[index],getLastMessageOfStation(stations[index].id).value))
-                    else
-                        data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
+                    else{
+                        val stationMsg=ArrayList<Message>()
+                        for(msg in messages){
+                            if(msg.stationID==stations[index].id)
+                                stationMsg.add(msg)
+                        }
+                        data.add(MainData(stations[index], stationMsg[stationMsg.size-1]))
+                    }
+
                 }
                 value = data
             }
