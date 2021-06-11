@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     companion object{
         var stationPhysicalID=ArrayList<String>()
         var stationPhoneNumbers=ArrayList<String?>()
-        var allStations:MutableList<Station> = mutableListOf()
+        var allStations:MutableList<Station> = mutableListOf<Station>()
         var isActivityOpen:Boolean=true
     }
 

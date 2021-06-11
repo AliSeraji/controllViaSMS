@@ -122,9 +122,12 @@ class SMSViewModel(private val messageDao:MessageDao
                             if(msg.stationID==stations[index].id)
                                 stationMsg.add(msg)
                         }
-                        data.add(MainData(stations[index], stationMsg[stationMsg.size-1]))
+                        if(stationMsg.size==0){
+                            data.add(MainData(stations[index], Message(null,stations[index].id,"", Date())))
+                        }
+                        else
+                            data.add(MainData(stations[index], stationMsg[stationMsg.size-1]))
                     }
-
                 }
                 value = data
             }

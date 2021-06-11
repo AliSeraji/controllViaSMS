@@ -105,7 +105,7 @@ class AddDeviceFragment : Fragment() {
     private fun textFormatter(string:String?):String{
         if(string==null || string=="")
             return ""
-        val str=string.split("?","(",")")
+        val str=string.split("?",",")
         if(str.size<2)
             return ""
         return str[1]

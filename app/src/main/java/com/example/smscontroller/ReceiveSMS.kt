@@ -55,7 +55,7 @@ class ReceiveSMS :BroadcastReceiver() {
         }
     }
     private fun textFormatter(string:String):String{
-        if(string==null || string=="")
+        if(string=="")
             return ""
         val str=string.split(":","(",")")
         if(str.size<2)
