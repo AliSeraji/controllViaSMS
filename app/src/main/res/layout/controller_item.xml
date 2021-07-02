@@ -9,6 +9,8 @@
     android:layout_height="100dp"
     style="@style/recyclerItem"
     android:layout_margin="3dp"
+    android:elevation="15dp"
+    android:translationZ="1dp"
     >
 
     <androidx.constraintlayout.widget.Guideline

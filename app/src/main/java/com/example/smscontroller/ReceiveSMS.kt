@@ -40,7 +40,7 @@ class ReceiveSMS :BroadcastReceiver() {
                 if(indexOfId!=-1){
                     //get message id from viewModel
 
-                    var message = Message(null, MainActivity.allStations[indexOfId].id!!.toLong(), receivedMessage, Date())
+                    var message = Message(null, MainActivity.allStations[indexOfId].id!!, receivedMessage, Date())
 
                     GlobalScope.launch {
                         SMSViewModel.viewModelStatic!!.insertMessage(message)

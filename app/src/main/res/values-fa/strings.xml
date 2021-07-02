@@ -15,7 +15,7 @@
     <string name="data_clear_warning">تمامی داده ها پاک شدند.</string>
     <string name="sms_sent">پیامک ارسال شد.</string>
     <string name="quantity">مقدار :%1$s</string>
-    <string name="date">تاریخ:%1$s</string>
-    <string name="message_text">متن پیام %1$s </string>
+    <string name="date">%1$s</string>
+    <string name="message_text"> %1$s </string>
 
 </resources>

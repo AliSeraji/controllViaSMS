@@ -24,6 +24,4 @@ class SplahsActivity : AppCompatActivity() {
             finish()
         }, 1500)
     }
-
-
 }

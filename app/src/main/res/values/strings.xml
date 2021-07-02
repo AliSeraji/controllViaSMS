@@ -16,7 +16,7 @@
     <string name="data_clear_warning">All Data is cleared.</string>
     <string name="sms_sent">SMS has been sent.</string>
     <string name="quantity">Quantity :%1$s</string>
-    <string name="date">Date:%1$s</string>
-    <string name="message_text">Text /n %1$s</string>
+    <string name="date">%1$s</string>
+    <string name="message_text"> %1$s</string>
 
 </resources>

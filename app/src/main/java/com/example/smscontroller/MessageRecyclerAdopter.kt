@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.ClassCastException
+import java.text.SimpleDateFormat
 
 private val ITEM_VIEW_TYPE = 2
 
@@ -59,8 +60,9 @@ class MessageRecyclerAdopter(context: Context) :ListAdapter<MessageRecyclerAdopt
 
     class MessageViewHolder(val binding:MessageItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(context: Context,item:Message){
-            binding.messageDate.text=context.getString(R.string.date,item.createdTime.toString())
-            binding.messageText.text=context.getString(R.string.message_text,"\n"+item.text)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a")
+            binding.messageDate.text=context.getString(R.string.date,dateFormat.format(item.createdTime).toString())
+            binding.messageText.text=context.getString(R.string.message_text,"\n\n"+item.text)
         }
 
         companion object{

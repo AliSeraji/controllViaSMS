@@ -48,6 +48,7 @@
         android:id="@+id/add_new_device"
         app:maxImageSize="25dp"
         app:fabCustomSize="60dp"
+        android:elevation="10dp"
         />
 
 

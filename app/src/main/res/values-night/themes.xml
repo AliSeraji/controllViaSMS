@@ -45,7 +45,7 @@
 
     <style name="customActionbar" parent="Theme.MaterialComponents">
         <item name="android:textSize">20sp</item>
-        <item name="android:background">?attr/colorPrimaryVariant</item>
+        <item name="android:background">?attr/colorOnSecondary</item>
         <item name="android:textColor">@color/creme</item>
     </style>
     <style name="recyclerItem" parent="Theme.MaterialComponents">

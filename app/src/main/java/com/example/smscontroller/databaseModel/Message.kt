@@ -12,10 +12,7 @@ import java.util.*
             childColumns = arrayOf("station_id"),
             onDelete = ForeignKey.CASCADE
         )
-    ),
-    indices = [
-        Index("station_id")
-    ]
+    )
 )
 
 data class Message(

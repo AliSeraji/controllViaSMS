@@ -146,8 +146,21 @@ class SMSViewModel(private val messageDao:MessageDao
         return Station()
     }
 
+
+    private suspend fun deleteStation(sid:Long?){
+        //messageDao.deleteFromMessages(sid)
+        //stationDao.deleteFromStation(sid)
+    }
+
     private suspend fun clear() {
-        stationDao.clear()
-        messageDao.clear()
+        for(station in allStations.value!!){
+            messageDao.deleteFromMessages(station.id)
+        }
+        for(station in allStations.value!!){
+            stationDao.deleteFromStation(station)
+        }
+
+        //stationDao.clear()
+        //messageDao.clear()
     }
 }

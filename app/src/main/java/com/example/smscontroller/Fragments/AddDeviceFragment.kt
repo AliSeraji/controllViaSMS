@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.example.smscontroller.MainActivity
 import com.example.smscontroller.R
 import com.example.smscontroller.SMSViewModel
 import com.example.smscontroller.databinding.FragmentAddDeviceBinding
@@ -60,12 +61,11 @@ class AddDeviceFragment : Fragment() {
             binding.submit.startLoading()
             binding.submit.isEnabled=false
             binding.submit.resetAfterFailed=true
-            if(binding.stationNumberInput.text.toString().trim().isNotEmpty() ||
-                    binding.stationNumberInput.text.toString().trim().isBlank()
-                    && binding.stationNumberInput.text.toString().trim().isNotEmpty()||
-                    binding.stationNumberInput.text.toString().trim().isNotBlank()
-                    && binding.stationRequestInput.text.toString().trim().isNotEmpty()||
-                    binding.stationRequestInput.text.toString().trim().isNotBlank()
+
+
+            if(binding.stationNumberInput.text.toString().trim().isNotEmpty()
+                    && binding.stationNumberInput.text.toString().trim().isNotEmpty()
+                    && binding.stationRequestInput.text.toString().trim().isNotEmpty()
                     ){
                 val station=viewModel.createStation()
 
@@ -97,6 +97,9 @@ class AddDeviceFragment : Fragment() {
         binding.clear.setOnClickListener {
             viewModel.clearDatabase()
             Toast.makeText(requireContext(),R.string.data_clear_warning,Toast.LENGTH_LONG).show()
+            MainActivity.allStations.clear()
+            MainActivity.stationPhoneNumbers.clear()
+            MainActivity.stationPhysicalID.clear()
         }
 
     }
