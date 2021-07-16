@@ -66,6 +66,9 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
             binding.getDeviceQuantity.setOnClickListener {
                 clickListener.onRefreshClick(absoluteAdapterPosition,item.station.id!!,binding.deviceQuantity)
             }
+            binding.delDevice.setOnClickListener {
+                clickListener.onDeleteItemClick(absoluteAdapterPosition,item.station)
+            }
             binding.executePendingBindings()
         }
 
@@ -87,6 +90,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     interface OnRecyclerItemClickListener{
         fun onRefreshClick(pos:Int,id:Long?,textView: TextView)
         fun onMoreDetailsClick(pos:Int,id:Long?)
+        fun onDeleteItemClick(pos:Int,station:Station?)
     }
 
     interface OnRecyclerItemFormatTextListener{

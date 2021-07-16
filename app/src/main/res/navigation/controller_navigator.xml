@@ -18,7 +18,9 @@
             app:exitAnim="@anim/anim_slide_out_left" />
         <action
             android:id="@+id/action_controllerFragment_to_messagesFragment"
-            app:destination="@id/messagesFragment" />
+            app:destination="@id/messagesFragment"
+            app:enterAnim="@anim/anim_slide_in_left"
+            app:exitAnim="@anim/anim_slide_out_left" />
     </fragment>
 
     <fragment
@@ -41,7 +43,9 @@
 
         <action
             android:id="@+id/action_messagesFragment_to_controllerFragment"
-            app:destination="@id/controllerFragment" />
+            app:destination="@id/controllerFragment"
+            app:enterAnim="@anim/anim_slide_in_right"
+            app:exitAnim="@anim/anim_slide_out_right" />
         <argument
             android:name="stationId"
             app:argType="long"

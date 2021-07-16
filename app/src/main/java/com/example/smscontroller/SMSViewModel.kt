@@ -7,6 +7,7 @@ import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.DatabaseAccess.MessageDao
 import com.example.smscontroller.DatabaseAccess.StationDao
 import com.example.smscontroller.databaseModel.Station
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -103,10 +104,6 @@ class SMSViewModel(private val messageDao:MessageDao
         allPhoneNo=stationDao.getAllPhoneNo()
     }
 
-    fun getAllPhoneNo():LiveData<List<String?>>{
-        return allPhoneNo
-    }
-
     private fun prepareDataForMonitoring(){
         monitoringData=MediatorLiveData<List<MainData>>().apply {
             fun update() {
@@ -138,23 +135,22 @@ class SMSViewModel(private val messageDao:MessageDao
 
     }
 
-    private fun getLastMessageOfStation(id:Long?):LiveData<Message>{
-        return messageDao.loadLastMessageOfEachStation(id)
-    }
-
     fun createStation():Station{
         return Station()
     }
 
+    suspend fun deleteStation(s:Station?){
+        for(msg in allMessages.value!!){
+            if(msg.stationID==s!!.id)
+                messageDao.deleteFromMessages(msg)
+        }
+        stationDao.deleteFromStation(s)
 
-    private suspend fun deleteStation(sid:Long?){
-        //messageDao.deleteFromMessages(sid)
-        //stationDao.deleteFromStation(sid)
     }
 
     private suspend fun clear() {
-        for(station in allStations.value!!){
-            messageDao.deleteFromMessages(station.id)
+        for(msg in allLastMessages.value!!){
+            messageDao.deleteFromMessages(msg)
         }
         for(station in allStations.value!!){
             stationDao.deleteFromStation(station)

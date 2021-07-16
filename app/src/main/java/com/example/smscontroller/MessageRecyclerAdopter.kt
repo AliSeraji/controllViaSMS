@@ -60,7 +60,7 @@ class MessageRecyclerAdopter(context: Context) :ListAdapter<MessageRecyclerAdopt
 
     class MessageViewHolder(val binding:MessageItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(context: Context,item:Message){
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
             binding.messageDate.text=context.getString(R.string.date,dateFormat.format(item.createdTime).toString())
             binding.messageText.text=context.getString(R.string.message_text,"\n\n"+item.text)
         }

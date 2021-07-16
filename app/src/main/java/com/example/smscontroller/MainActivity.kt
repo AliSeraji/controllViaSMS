@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     private fun init(){
         setUpViewModel()
         viewModel.getAllStationsToObserve().observe(this, {
-            this.lifecycleScope.launch(Dispatchers.IO) {
+            this.lifecycleScope.launch {
                 for (station in it) {
                     allStations.add(station)
                     stationPhoneNumbers.add(station.phone)

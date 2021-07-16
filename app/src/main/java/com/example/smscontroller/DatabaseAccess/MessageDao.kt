@@ -32,6 +32,6 @@ interface MessageDao {
     @Query("DELETE FROM messages")
     suspend fun clear()
 
-    @Query("delete from messages where station_id=:sid")
-    suspend fun deleteFromMessages(sid:Long?)
+    @Delete
+    suspend fun deleteFromMessages(msg:Message?)
 }

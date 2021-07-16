@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHeight_percent=".065"
         android:src="@drawable/ic_arrow"
-        android:background="@drawable/back_btn_background"
+        style="@style/back_btn_style"
         android:id="@+id/back_btn"
         />
 

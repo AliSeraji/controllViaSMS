@@ -28,5 +28,5 @@ interface StationDao {
     suspend fun clear()
 
     @Delete
-    suspend fun deleteFromStation(station:Station)
+    suspend fun deleteFromStation(station:Station?)
 }

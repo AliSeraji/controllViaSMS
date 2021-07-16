@@ -54,5 +54,8 @@
         <item name="android:color">#f2f2f2</item>
     </style>
 
+    <style name="back_btn_style" parent="Theme.MaterialComponents">
+        <item name="android:background">?attr/colorPrimaryVariant</item>
+    </style>
 
 </resources>

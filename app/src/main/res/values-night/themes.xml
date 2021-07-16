@@ -56,5 +56,9 @@
         <item name="android:color">?attr/colorOnSecondary</item>
     </style>
 
+    <style name="back_btn_style" parent="Theme.MaterialComponents">
+        <item name="android:background">?attr/colorOnSecondary</item>
+    </style>
+
 
 </resources>
