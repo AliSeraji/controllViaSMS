@@ -3,6 +3,7 @@ package com.example.smscontroller.Fragments
 import android.content.BroadcastReceiver
 import android.os.Bundle
 import android.telephony.SmsManager
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,12 +77,13 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         }
     }
 
-    override fun onRefreshClick(pos: Int, id: Long?, textView: TextView) {
+    override fun onRefreshClick(phoneNo:String,textMsg:String) {
+        //MainActivity.allStations.indexOf()
 
-        viewModel.getStationById(id).observe(viewLifecycleOwner,{
-            sendSMS(it!!.phone,it.requestDataText)
-            Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
-        })
+        //val station=viewModel.getStationById(id)
+        //sendSMS(station.value!!.phone, station.value!!.requestDataText)
+        //Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
+        sendSMS(phoneNo,textMsg)
 
     }
 
@@ -92,23 +94,33 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
     override fun onDeleteItemClick(pos: Int, station: Station?) {
         viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
-            lifecycleScope.launch(Dispatchers.IO){
-                MainActivity.allStations.remove(station)
-                MainActivity.stationPhysicalID.remove(station!!.physicalID)
-                MainActivity.stationPhoneNumbers.remove(station.phone)
-                viewModel.deleteStation(station)
-
+            it.let {
+                lifecycleScope.launch(Dispatchers.Default) {
+                    MainActivity.allStations.remove(station)
+                    MainActivity.stationPhysicalID.remove(station!!.physicalID)
+                    MainActivity.stationPhoneNumbers.remove(station.phone)
+                    viewModel.deleteStation(station)
+                }
+                recyclerView.notifyItemRemoved(pos)
+                recyclerView.notifyItemRangeChanged(pos, it.size)
+                recyclerView.notifyDataSetChanged()
+                recyclerView.addViewSubmitList(it)
             }
-            recyclerView.notifyItemRemoved(pos)
-            recyclerView.notifyItemRangeChanged(pos,it.size)
-            recyclerView.notifyDataSetChanged()
-            recyclerView.addViewSubmitList(it)
         })
     }
 
     private fun sendSMS(deviceNo:String,text:String){
-        val sms=SmsManager.getDefault()
-        sms.sendTextMessage(deviceNo,"ourControllerApp",text,null,null)
+        var smsManager = SmsManager.getDefault()
+        if (android.os.Build.VERSION.SDK_INT < 22) {
+            Log.e("Alert", "Checking SubscriptionId");
+        } else {
+            smsManager =
+                SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
+        }
+        smsManager.sendTextMessage(deviceNo, null, text, null, null)
+        Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
+
+        //sms.sendTextMessage(deviceNo,"ourControllerApp",text,null,null)
     }
 
 
@@ -121,4 +133,3 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         return str[1]
     }
 }
-

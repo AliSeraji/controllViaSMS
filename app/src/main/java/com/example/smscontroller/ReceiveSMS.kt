@@ -62,5 +62,4 @@ class ReceiveSMS :BroadcastReceiver() {
             return ""
         return str[0]
     }
-
 }

@@ -6,7 +6,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.smscontroller.databaseModel.Message
-import com.example.smscontroller.databaseModel.Station
 
 
 @Dao

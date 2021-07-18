@@ -18,7 +18,6 @@ class SMSViewModel(private val messageDao:MessageDao
                     ,application:Application)
                     :AndroidViewModel(application){
 
-    private lateinit var allData:LiveData<List<MainData>>
     private lateinit var monitoringData:LiveData<List<MainData>>
     private lateinit var allMessages:LiveData<List<Message>>
     private lateinit var allStations:LiveData<List<Station>>
@@ -145,18 +144,18 @@ class SMSViewModel(private val messageDao:MessageDao
                 messageDao.deleteFromMessages(msg)
         }
         stationDao.deleteFromStation(s)
-
     }
 
     private suspend fun clear() {
-        for(msg in allLastMessages.value!!){
-            messageDao.deleteFromMessages(msg)
-        }
-        for(station in allStations.value!!){
-            stationDao.deleteFromStation(station)
-        }
-
-        //stationDao.clear()
-        //messageDao.clear()
+        /*if(allLastMessages.value!!.size==0 || allStations.value!!.size==0){
+            for(msg in allLastMessages.value!!){
+                messageDao.deleteFromMessages(msg)
+            }
+            for(station in allStations.value!!){
+                stationDao.deleteFromStation(station)
+            }
+        }*/
+        stationDao.clear()
+        messageDao.clear()
     }
 }
