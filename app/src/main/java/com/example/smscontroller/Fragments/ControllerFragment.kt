@@ -1,6 +1,5 @@
 package com.example.smscontroller.Fragments
 
-import android.content.BroadcastReceiver
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
@@ -8,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -20,7 +18,6 @@ import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.FragmentControllerBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -78,13 +75,15 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     }
 
     override fun onRefreshClick(phoneNo:String,textMsg:String) {
-        //MainActivity.allStations.indexOf()
-
-        //val station=viewModel.getStationById(id)
-        //sendSMS(station.value!!.phone, station.value!!.requestDataText)
-        //Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
-        sendSMS(phoneNo,textMsg)
-
+        var smsManager = SmsManager.getDefault()
+        if (android.os.Build.VERSION.SDK_INT < 22) {
+            Log.e("Alert", "Checking SubscriptionId");
+        } else {
+            smsManager =
+                SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
+        }
+        smsManager.sendTextMessage(phoneNo, null, textMsg, null, null)
+        Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
     }
 
     override fun onMoreDetailsClick(pos: Int, id: Long?) {
@@ -108,21 +107,6 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
             }
         })
     }
-
-    private fun sendSMS(deviceNo:String,text:String){
-        var smsManager = SmsManager.getDefault()
-        if (android.os.Build.VERSION.SDK_INT < 22) {
-            Log.e("Alert", "Checking SubscriptionId");
-        } else {
-            smsManager =
-                SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
-        }
-        smsManager.sendTextMessage(deviceNo, null, text, null, null)
-        Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
-
-        //sms.sendTextMessage(deviceNo,"ourControllerApp",text,null,null)
-    }
-
 
     override fun onFormatText(text: String?): String {
         if(text==null || text=="")

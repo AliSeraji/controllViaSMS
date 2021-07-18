@@ -1,6 +1,6 @@
 package com.example.smscontroller.databaseModel
 
-import androidx.room.ColumnInfo
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

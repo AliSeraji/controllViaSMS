@@ -147,14 +147,6 @@ class SMSViewModel(private val messageDao:MessageDao
     }
 
     private suspend fun clear() {
-        /*if(allLastMessages.value!!.size==0 || allStations.value!!.size==0){
-            for(msg in allLastMessages.value!!){
-                messageDao.deleteFromMessages(msg)
-            }
-            for(station in allStations.value!!){
-                stationDao.deleteFromStation(station)
-            }
-        }*/
         stationDao.clear()
         messageDao.clear()
     }

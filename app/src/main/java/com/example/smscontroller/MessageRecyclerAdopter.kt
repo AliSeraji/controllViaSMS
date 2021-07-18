@@ -82,11 +82,11 @@ class MessageRecyclerAdopter(context: Context) :ListAdapter<MessageRecyclerAdopt
         }
     }
 
-    class AdopterDataDiffCallback: DiffUtil.ItemCallback<MessageRecyclerAdopter.DataItem>(){
-        override fun areItemsTheSame(oldItem: MessageRecyclerAdopter.DataItem, newItem: MessageRecyclerAdopter.DataItem): Boolean {
+    class AdopterDataDiffCallback: DiffUtil.ItemCallback<DataItem>(){
+        override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
             return oldItem.id==newItem.id
         }
-        override fun areContentsTheSame(oldItem: MessageRecyclerAdopter.DataItem, newItem: MessageRecyclerAdopter.DataItem): Boolean {
+        override fun areContentsTheSame(oldItem:DataItem, newItem: DataItem): Boolean {
             return oldItem==newItem
         }
     }
