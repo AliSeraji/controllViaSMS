@@ -1,16 +1,16 @@
 package com.example.smscontroller.DatabaseAccess
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.smscontroller.databaseModel.Station
 
 @Dao
 interface StationDao {
     @Insert
     suspend fun insert(station: Station): Long?
+
+    @Update
+    suspend fun update(station: Station)
 
     @Query("SELECT * FROM stations")
     fun loadAll(): LiveData<List<Station>>

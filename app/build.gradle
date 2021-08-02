@@ -94,5 +94,8 @@ dependencies {
 
     //progress button
     implementation 'com.github.StevenDXC:DxLoadingButton:2.4'
+    //loading animations
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    implementation 'com.github.Marvel999:Android-Loading-Animation:1.0.0'
 
 }

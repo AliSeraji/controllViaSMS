@@ -73,6 +73,7 @@ class AddDeviceFragment : Fragment() {
                 station.phone=binding.stationNumberInput.text.toString()
                 station.requestDataText=binding.stationRequestInput.text.toString()
                 station.physicalID=textFormatter(binding.stationRequestInput.text.toString())
+                station.isPending=false
 
                 viewModel.insertStation(station)
                 Toast.makeText(requireContext(),R.string.success,Toast.LENGTH_LONG).show()

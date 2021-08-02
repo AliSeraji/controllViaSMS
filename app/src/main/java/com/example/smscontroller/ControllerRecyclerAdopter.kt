@@ -3,8 +3,9 @@ package com.example.smscontroller
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +23,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     private val mOnItemClickListener=onItemClickListener
     private val mContext=context
     private val mOnRecyclerItemFormatTextListener=onFormatTextListener
+
     fun addViewSubmitList(list:List<MainData>?){
         adapterScope.launch {
             val items=when(list){
@@ -50,11 +52,36 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
             }
     }
 
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder,
+                                  position: Int,
+                                  payloads: MutableList<Any>) {
+        if (!payloads.isEmpty()) {
+            // Because these updates can be batched,
+            // there can be multiple payloads for a single bind
+            when (payloads[0]) {
+                Payload.FAVORITE_CHANGE -> {
+                    // Change only the "favorite" icon,
+                    // leave background image alone:
+                    bindFavoriteIcon(holder,
+                        items[position].isFavorited)
+                }
+            }
+        }
+        // When payload list is empty,
+        // or we don't have logic to handle a given type,
+        // default to full bind:
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
 
     class ControllerItemHolder(val binding: ControllerItemBinding):RecyclerView.ViewHolder(binding.root){
-
+        private val circularAnimation=CircularAnimation()
         fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener,formatTextListener: OnRecyclerItemFormatTextListener){
-
+            if(!item.station.isPending && binding.getDeviceDetails.visibility== View.INVISIBLE){
+                circularAnimation.circularRevealAnimation(binding.getDeviceDetails)
+                circularAnimation.circularRevealAnimation(binding.getDeviceQuantity)
+                circularAnimation.circularRevealAnimation(binding.delDevice)
+            }
 
             binding.deviceName.text=item.station.name
 
@@ -63,12 +90,18 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
             binding.getDeviceDetails.setOnClickListener {
                 clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.station.id!!)
             }
+
             binding.getDeviceQuantity.setOnClickListener {
-                clickListener.onRefreshClick(item.station.phone,item.station.requestDataText)
+                    circularAnimation.circularHideAnimation(binding.getDeviceDetails)
+                    circularAnimation.circularHideAnimation(binding.getDeviceQuantity)
+                    circularAnimation.circularHideAnimation(binding.delDevice)
+                    clickListener.onRefreshClick(item.station,absoluteAdapterPosition)
             }
+
             binding.delDevice.setOnClickListener {
                 clickListener.onDeleteItemClick(absoluteAdapterPosition,item.station)
             }
+
             binding.executePendingBindings()
         }
 
@@ -88,10 +121,11 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     }
 
     interface OnRecyclerItemClickListener{
-        fun onRefreshClick(phoneNo:String,msgText: String)
+        fun onRefreshClick(station: Station,pos:Int)
         fun onMoreDetailsClick(pos:Int,id:Long?)
         fun onDeleteItemClick(pos:Int,station:Station?)
     }
+
 
     interface OnRecyclerItemFormatTextListener{
         fun onFormatText(text:String?):String

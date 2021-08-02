@@ -5,16 +5,19 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-
 import android.telephony.SmsMessage
 import com.example.smscontroller.databaseModel.Message
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 class ReceiveSMS :BroadcastReceiver() {
+
+    private lateinit var onReceiveSMSUpdate:OnReceiveSMSUpdate
     override fun onReceive(context: Context?, intent: Intent?) {
         var extras = intent?.extras
+
         if (extras != null) {
             var sms = extras.get("pdus") as Array<*>
             for (i in sms.indices) {
@@ -31,7 +34,6 @@ class ReceiveSMS :BroadcastReceiver() {
 
                 var intent = Intent(context, MainActivity::class.java)
 
-
                 //here we need to find the stationId that has the physical address of received SMS
                 //now it works
                 var indexOfId=MainActivity.stationPhysicalID.indexOf(textFormatter(receivedMessage))
@@ -44,6 +46,8 @@ class ReceiveSMS :BroadcastReceiver() {
 
                     GlobalScope.launch {
                         SMSViewModel.viewModelStatic!!.insertMessage(message)
+                        MainActivity.allStations[indexOfId].isPending=false
+                        SMSViewModel.viewModelStatic!!.updateStationCondition(MainActivity.allStations[indexOfId])
                     }
                     intent.putExtra("receivedMessage", "$receivedMessage##$phoneNumber")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -54,6 +58,7 @@ class ReceiveSMS :BroadcastReceiver() {
             }
         }
     }
+
     private fun textFormatter(string:String):String{
         if(string=="")
             return ""
@@ -61,5 +66,13 @@ class ReceiveSMS :BroadcastReceiver() {
         if(str.size<2)
             return ""
         return str[0]
+    }
+
+    public fun initInterface(mUpdateRecyclerviewItem:OnReceiveSMSUpdate){
+        onReceiveSMSUpdate=mUpdateRecyclerviewItem
+    }
+
+    interface OnReceiveSMSUpdate{
+        fun updateRecyclerviewItem(indexOfId:Int,msg:String)
     }
 }

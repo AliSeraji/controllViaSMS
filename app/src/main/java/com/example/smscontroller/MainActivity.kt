@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         var isActivityOpen:Boolean=true
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         forceRTL()
@@ -84,12 +83,12 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+
     }
 
     private fun forceRTL(){
         getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
     }
-
 
     private fun setApplicationLocale(locale: String) {
         val resources = resources
@@ -118,7 +117,6 @@ class MainActivity : AppCompatActivity() {
         }
         requestPermissions(remainedPermissions.toTypedArray(), 101)
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(

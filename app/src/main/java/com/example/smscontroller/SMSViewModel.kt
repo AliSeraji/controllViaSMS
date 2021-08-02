@@ -18,7 +18,7 @@ class SMSViewModel(private val messageDao:MessageDao
                     ,application:Application)
                     :AndroidViewModel(application){
 
-    private lateinit var monitoringData:LiveData<List<MainData>>
+    private lateinit var monitoringData:MutableLiveData<List<MainData>>
     private lateinit var allMessages:LiveData<List<Message>>
     private lateinit var allStations:LiveData<List<Station>>
     private lateinit var allMessagesOfAStation:LiveData<List<Message>>
@@ -45,6 +45,12 @@ class SMSViewModel(private val messageDao:MessageDao
         }
     }
 
+    fun updateStationCondition(station: Station){
+        viewModelScope.launch {
+            updateStation(station)
+        }
+    }
+
     fun insertStation(station: Station){
         viewModelScope.launch {
             addStation(station)
@@ -67,6 +73,10 @@ class SMSViewModel(private val messageDao:MessageDao
 
     private suspend fun addStation(station:Station){
             stationDao.insert(station)
+    }
+
+    private suspend fun updateStation(station: Station){
+        stationDao.update(station)
     }
 
     private fun getAllMessages(){

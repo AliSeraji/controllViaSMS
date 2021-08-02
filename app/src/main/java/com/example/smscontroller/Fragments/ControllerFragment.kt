@@ -1,5 +1,6 @@
 package com.example.smscontroller.Fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
@@ -13,16 +14,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.smscontroller.*
+import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.FragmentControllerBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener,ControllerRecyclerAdopter.OnRecyclerItemFormatTextListener {
+class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener,ControllerRecyclerAdopter.OnRecyclerItemFormatTextListener,ReceiveSMS.OnReceiveSMSUpdate {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -57,14 +62,19 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
 
     private fun init(){
+
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
         recyclerView=ControllerRecyclerAdopter(requireContext(),this,this)
+        recyclerView.stateRestorationPolicy=RecyclerView.Adapter.StateRestorationPolicy.PREVENT
         binding.deviceRecyclerView.adapter=recyclerView
+
         viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
             it.let {
                 recyclerView.addViewSubmitList(it)
+                recyclerView.notifyDataSetChanged()
             }
         })
+
 
     }
 
@@ -74,7 +84,13 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         }
     }
 
-    override fun onRefreshClick(phoneNo:String,textMsg:String) {
+    override fun onRefreshClick(station: Station,pos:Int) {
+        var index=MainActivity.stationPhysicalID.indexOf(station.physicalID)
+        MainActivity.allStations[index].isPending = true
+        SMSViewModel.viewModelStatic!!.updateStationCondition(MainActivity.allStations[index])
+        recyclerView.notifyItemChanged(pos)
+        recyclerView.notifyDataSetChanged()
+
         var smsManager = SmsManager.getDefault()
         if (android.os.Build.VERSION.SDK_INT < 22) {
             Log.e("Alert", "Checking SubscriptionId");
@@ -82,7 +98,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
             smsManager =
                 SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
         }
-        smsManager.sendTextMessage(phoneNo, null, textMsg, null, null)
+        smsManager.sendTextMessage(station.phone, null, station.requestDataText, null, null)
         Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
     }
 
@@ -116,4 +132,14 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
             return ""
         return str[1]
     }
+
+    override fun updateRecyclerviewItem(indexOfId: Int, msg: String) {
+        var message = Message(null, MainActivity.allStations[indexOfId].id!!, msg, Date())
+        lifecycleScope.launch {
+                        SMSViewModel.viewModelStatic!!.insertMessage(message)
+        }
+    }
+
+
+
 }
