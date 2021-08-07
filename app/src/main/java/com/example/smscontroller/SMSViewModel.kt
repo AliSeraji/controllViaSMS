@@ -47,6 +47,7 @@ class SMSViewModel(private val messageDao:MessageDao
 
     fun updateStationCondition(station: Station){
         viewModelScope.launch {
+
             updateStation(station)
         }
     }

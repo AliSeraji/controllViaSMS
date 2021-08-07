@@ -1,6 +1,6 @@
 package com.example.smscontroller.Fragments
 
-import android.content.Context
+
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
@@ -16,20 +16,28 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smscontroller.*
-import com.example.smscontroller.databaseModel.Message
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.FragmentControllerBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener,ControllerRecyclerAdopter.OnRecyclerItemFormatTextListener,ReceiveSMS.OnReceiveSMSUpdate {
+
+
+class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener,ControllerRecyclerAdopter.OnRecyclerItemFormatTextListener {
+
+    enum class RecyclerviewIncomingOperation{
+        STARTING,
+        IDLE,
+        REFRESHING,
+        DELETING,
+        UPDATING,
+    }
+
     private var param1: String? = null
     private var param2: String? = null
+    private var recyclerviewIncomingOperation=RecyclerviewIncomingOperation.STARTING
 
     private lateinit var binding:FragmentControllerBinding
     private lateinit var viewModel: SMSViewModel
@@ -48,7 +56,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     ): View? {
         // Inflate the layout for this fragment
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_controller, container, false)
-
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -70,10 +78,27 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
         viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
             it.let {
-                recyclerView.addViewSubmitList(it)
-                recyclerView.notifyDataSetChanged()
+                when(recyclerviewIncomingOperation){
+                    RecyclerviewIncomingOperation.STARTING->{
+                        recyclerView.addViewSubmitList(it)
+                    }
+                    RecyclerviewIncomingOperation.DELETING->{
+                        Toast.makeText(requireContext(),"Deleting",Toast.LENGTH_LONG).show()
+                        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                    }
+                    RecyclerviewIncomingOperation.REFRESHING->{
+                        Toast.makeText(requireContext(),"Refreshing",Toast.LENGTH_LONG).show()
+                        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                    }
+                    RecyclerviewIncomingOperation.UPDATING->{
+                        Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
+                        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                    }
+                    else ->{}
+                }
             }
         })
+        
 
 
     }
@@ -85,12 +110,22 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     }
 
     override fun onRefreshClick(station: Station,pos:Int) {
-        var index=MainActivity.stationPhysicalID.indexOf(station.physicalID)
-        MainActivity.allStations[index].isPending = true
-        SMSViewModel.viewModelStatic!!.updateStationCondition(MainActivity.allStations[index])
-        recyclerView.notifyItemChanged(pos)
-        recyclerView.notifyDataSetChanged()
 
+        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.REFRESHING
+        //recyclerView.notifyItemChanged(pos)
+        /*viewModel.getDataForMonitoring().observe(viewLifecycleOwner, {
+            it.let {
+                lifecycleScope.launch{
+                    var index=MainActivity.stationPhysicalID.indexOf(station.physicalID)
+                    it[index].station.isPending=true
+                    //MainActivity.allStations[index].isPending = true
+                    viewModel.updateStationCondition(it[index].station)
+                }
+            }
+                recyclerView.notifyItemChanged(pos)
+                //recyclerView.notifyDataSetChanged()
+                recyclerView.addViewSubmitList(it)
+        })*/
         var smsManager = SmsManager.getDefault()
         if (android.os.Build.VERSION.SDK_INT < 22) {
             Log.e("Alert", "Checking SubscriptionId");
@@ -99,7 +134,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                 SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
         }
         smsManager.sendTextMessage(station.phone, null, station.requestDataText, null, null)
-        Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
+        //Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
     }
 
     override fun onMoreDetailsClick(pos: Int, id: Long?) {
@@ -108,9 +143,11 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     }
 
     override fun onDeleteItemClick(pos: Int, station: Station?) {
+        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.DELETING
         viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
             it.let {
-                lifecycleScope.launch(Dispatchers.Default) {
+                lifecycleScope.launch {
+                    //MainActivity.allStations=removeFromMutableList(MainActivity.allStations,station!!)
                     MainActivity.allStations.remove(station)
                     MainActivity.stationPhysicalID.remove(station!!.physicalID)
                     MainActivity.stationPhoneNumbers.remove(station.phone)
@@ -119,9 +156,10 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                 recyclerView.notifyItemRemoved(pos)
                 recyclerView.notifyItemRangeChanged(pos, it.size)
                 recyclerView.notifyDataSetChanged()
-                recyclerView.addViewSubmitList(it)
+
             }
         })
+
     }
 
     override fun onFormatText(text: String?): String {
@@ -133,13 +171,8 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         return str[1]
     }
 
-    override fun updateRecyclerviewItem(indexOfId: Int, msg: String) {
-        var message = Message(null, MainActivity.allStations[indexOfId].id!!, msg, Date())
-        lifecycleScope.launch {
-                        SMSViewModel.viewModelStatic!!.insertMessage(message)
-        }
-    }
-
-
+   companion object{
+       var receivedSMSs=ArrayList<MainData>()
+   }
 
 }

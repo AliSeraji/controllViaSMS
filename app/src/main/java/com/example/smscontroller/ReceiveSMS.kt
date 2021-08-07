@@ -14,7 +14,6 @@ import java.util.*
 
 class ReceiveSMS :BroadcastReceiver() {
 
-    private lateinit var onReceiveSMSUpdate:OnReceiveSMSUpdate
     override fun onReceive(context: Context?, intent: Intent?) {
         var extras = intent?.extras
 
@@ -54,7 +53,6 @@ class ReceiveSMS :BroadcastReceiver() {
                     if(!MainActivity.isActivityOpen)
                         context!!.startActivity(intent)
                 }
-
             }
         }
     }
@@ -68,11 +66,5 @@ class ReceiveSMS :BroadcastReceiver() {
         return str[0]
     }
 
-    public fun initInterface(mUpdateRecyclerviewItem:OnReceiveSMSUpdate){
-        onReceiveSMSUpdate=mUpdateRecyclerviewItem
-    }
 
-    interface OnReceiveSMSUpdate{
-        fun updateRecyclerviewItem(indexOfId:Int,msg:String)
-    }
 }

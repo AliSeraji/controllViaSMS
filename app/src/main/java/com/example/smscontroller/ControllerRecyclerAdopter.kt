@@ -3,9 +3,8 @@ package com.example.smscontroller
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +15,9 @@ import java.lang.ClassCastException
 
 
 private val ITEM_VIEW_TYPE_ITEM = 1
-
+private val ITEM_VIEW_TYPE_CONTROLLER=2
+private val IS_PENDING=101
+private val IS_NOT_ENDING=102
 class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecyclerItemClickListener, onFormatTextListener:OnRecyclerItemFormatTextListener):ListAdapter<ControllerRecyclerAdopter.DataItem,RecyclerView.ViewHolder>(AdopterDataDiffCallback()){
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -44,45 +45,27 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            when(holder){
+        when(holder){
                 is ControllerItemHolder->{
                     val item=getItem(position) as DataItem.ControllerItem
+
                     holder.bind(mContext,item.data,mOnItemClickListener,mOnRecyclerItemFormatTextListener)
+
                 }
             }
     }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder,
-                                  position: Int,
-                                  payloads: MutableList<Any>) {
-        if (!payloads.isEmpty()) {
-            // Because these updates can be batched,
-            // there can be multiple payloads for a single bind
-            when (payloads[0]) {
-                Payload.FAVORITE_CHANGE -> {
-                    // Change only the "favorite" icon,
-                    // leave background image alone:
-                    bindFavoriteIcon(holder,
-                        items[position].isFavorited)
-                }
-            }
-        }
-        // When payload list is empty,
-        // or we don't have logic to handle a given type,
-        // default to full bind:
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
 
     class ControllerItemHolder(val binding: ControllerItemBinding):RecyclerView.ViewHolder(binding.root){
         private val circularAnimation=CircularAnimation()
         fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener,formatTextListener: OnRecyclerItemFormatTextListener){
-            if(!item.station.isPending && binding.getDeviceDetails.visibility== View.INVISIBLE){
+
+            /*if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow){
                 circularAnimation.circularRevealAnimation(binding.getDeviceDetails)
                 circularAnimation.circularRevealAnimation(binding.getDeviceQuantity)
                 circularAnimation.circularRevealAnimation(binding.delDevice)
-            }
+            }*/
 
+            //binding.controllerData=item
             binding.deviceName.text=item.station.name
 
             binding.deviceQuantity.text=context.getString(R.string.quantity,formatTextListener.onFormatText(item.message!!.text))
@@ -92,9 +75,11 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
             }
 
             binding.getDeviceQuantity.setOnClickListener {
-                    circularAnimation.circularHideAnimation(binding.getDeviceDetails)
-                    circularAnimation.circularHideAnimation(binding.getDeviceQuantity)
-                    circularAnimation.circularHideAnimation(binding.delDevice)
+                    val animation=AnimationUtils.loadAnimation(context,R.anim.anim_rotate)
+                    binding.getDeviceQuantity.startAnimation(animation)
+                    //circularAnimation.circularHideAnimation(binding.getDeviceDetails)
+                    //circularAnimation.circularHideAnimation(binding.getDeviceQuantity)
+                    //circularAnimation.circularHideAnimation(binding.delDevice)
                     clickListener.onRefreshClick(item.station,absoluteAdapterPosition)
             }
 
@@ -133,17 +118,36 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
 
     sealed class DataItem{
         abstract val id:Long?
+        abstract val isPending:Boolean
+        abstract val text:String?
         data class ControllerItem(val data :MainData):DataItem(){
             override val id=data.station.id
+            override val isPending: Boolean
+                get() = data.station.isPending
+            override val text: String
+                get() = data.message!!.text
         }
+
     }
 
     class AdopterDataDiffCallback:DiffUtil.ItemCallback<DataItem>(){
         override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-            return oldItem.id==newItem.id
+            return (oldItem.text==newItem.text && oldItem.isPending==newItem.isPending)
         }
+
         override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
             return oldItem==newItem
         }
+
+        override fun getChangePayload(oldItem: DataItem, newItem: DataItem): Any? {
+            return when{
+                !oldItem.isPending && newItem.isPending -> IS_PENDING
+                oldItem.isPending && !newItem.isPending -> IS_NOT_ENDING
+                else -> null
+            }
+        }
+
+
+
     }
 }

@@ -38,8 +38,9 @@ class MainActivity : AppCompatActivity() {
     companion object{
         var stationPhysicalID=ArrayList<String>()
         var stationPhoneNumbers=ArrayList<String?>()
-        var allStations:MutableList<Station> = mutableListOf<Station>()
+        var allStations:MutableList<Station> = mutableListOf()
         var isActivityOpen:Boolean=true
+        var newStations=ArrayList<Station>()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +76,9 @@ class MainActivity : AppCompatActivity() {
         setUpViewModel()
         viewModel.getAllStationsToObserve().observe(this, {
             this.lifecycleScope.launch {
+                allStations.clear()
+                stationPhoneNumbers.clear()
+                stationPhysicalID.clear()
                 for (station in it) {
                     allStations.add(station)
                     stationPhoneNumbers.add(station.phone)
