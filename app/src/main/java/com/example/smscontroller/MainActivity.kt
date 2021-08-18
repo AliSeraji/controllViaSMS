@@ -22,6 +22,10 @@ import java.util.*
 import java.util.logging.Handler
 import kotlin.collections.ArrayList
 
+const val ITEM_IS_PENDING=1201
+const val ITEM_IS_NOT_PENDING=1202
+
+
 
 class MainActivity : AppCompatActivity() {
 

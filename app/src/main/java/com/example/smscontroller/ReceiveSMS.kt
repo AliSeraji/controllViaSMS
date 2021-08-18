@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.telephony.SmsMessage
+import com.example.smscontroller.Fragments.ControllerFragment
 import com.example.smscontroller.databaseModel.Message
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,7 +47,9 @@ class ReceiveSMS :BroadcastReceiver() {
                     GlobalScope.launch {
                         SMSViewModel.viewModelStatic!!.insertMessage(message)
                         MainActivity.allStations[indexOfId].isPending=false
+                        ControllerFragment.recyclerviewIncomingOperation=ControllerFragment.RecyclerviewIncomingOperation.UPDATING
                         SMSViewModel.viewModelStatic!!.updateStationCondition(MainActivity.allStations[indexOfId])
+
                     }
                     intent.putExtra("receivedMessage", "$receivedMessage##$phoneNumber")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

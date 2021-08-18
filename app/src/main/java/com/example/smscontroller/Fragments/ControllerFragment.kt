@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smscontroller.*
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.FragmentControllerBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
@@ -25,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
 
 
 
-class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener,ControllerRecyclerAdopter.OnRecyclerItemFormatTextListener {
+class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemClickListener {
 
     enum class RecyclerviewIncomingOperation{
         STARTING,
@@ -37,7 +38,6 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
     private var param1: String? = null
     private var param2: String? = null
-    private var recyclerviewIncomingOperation=RecyclerviewIncomingOperation.STARTING
 
     private lateinit var binding:FragmentControllerBinding
     private lateinit var viewModel: SMSViewModel
@@ -56,7 +56,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     ): View? {
         // Inflate the layout for this fragment
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_controller, container, false)
-        binding.lifecycleOwner = this
+
         return binding.root
     }
 
@@ -68,14 +68,14 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
         events()
     }
 
-
     private fun init(){
 
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
-        recyclerView=ControllerRecyclerAdopter(requireContext(),this,this)
+        recyclerView=ControllerRecyclerAdopter(requireContext(),this)
         recyclerView.stateRestorationPolicy=RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+        binding.deviceRecyclerView.itemAnimator=ControllerRecyclerItemAnimator()
         binding.deviceRecyclerView.adapter=recyclerView
-
+        binding.lifecycleOwner = this
         viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
             it.let {
                 when(recyclerviewIncomingOperation){
@@ -93,8 +93,17 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     RecyclerviewIncomingOperation.UPDATING->{
                         Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                       // recyclerView.notifyItemChanged(0, ITEM_IS_NOT_PENDING)
+                        lifecycleScope.launch(Dispatchers.IO){
+                            recyclerView.addViewSubmitList(it)
+                        }
                     }
-                    else ->{}
+                    else ->{
+                        lifecycleScope.launch(Dispatchers.IO){
+                            recyclerView.addViewSubmitList(it)
+                        }
+                        //return@let
+                    }
                 }
             }
         })
@@ -112,20 +121,13 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
     override fun onRefreshClick(station: Station,pos:Int) {
 
         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.REFRESHING
-        //recyclerView.notifyItemChanged(pos)
-        /*viewModel.getDataForMonitoring().observe(viewLifecycleOwner, {
-            it.let {
-                lifecycleScope.launch{
-                    var index=MainActivity.stationPhysicalID.indexOf(station.physicalID)
-                    it[index].station.isPending=true
-                    //MainActivity.allStations[index].isPending = true
-                    viewModel.updateStationCondition(it[index].station)
-                }
-            }
-                recyclerView.notifyItemChanged(pos)
-                //recyclerView.notifyDataSetChanged()
-                recyclerView.addViewSubmitList(it)
-        })*/
+        lifecycleScope.launch{
+            var index=MainActivity.stationPhysicalID.indexOf(station.physicalID)
+            MainActivity.allStations[index].isPending=true
+            viewModel.getAllStationsToObserve().value!![index].isPending=true
+            viewModel.updateStationCondition(MainActivity.allStations[index])
+        }
+
         var smsManager = SmsManager.getDefault()
         if (android.os.Build.VERSION.SDK_INT < 22) {
             Log.e("Alert", "Checking SubscriptionId");
@@ -134,7 +136,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                 SmsManager.getSmsManagerForSubscriptionId(smsManager.subscriptionId)
         }
         smsManager.sendTextMessage(station.phone, null, station.requestDataText, null, null)
-        //Toast.makeText(requireContext(),R.string.sms_sent,Toast.LENGTH_LONG).show()
+
     }
 
     override fun onMoreDetailsClick(pos: Int, id: Long?) {
@@ -162,17 +164,8 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
     }
 
-    override fun onFormatText(text: String?): String {
-        if(text==null || text=="")
-            return ""
-        val str=text.split(":","(",")")
-        if(str.size<2)
-            return ""
-        return str[1]
-    }
-
    companion object{
-       var receivedSMSs=ArrayList<MainData>()
+       var recyclerviewIncomingOperation=RecyclerviewIncomingOperation.STARTING
    }
 
 }

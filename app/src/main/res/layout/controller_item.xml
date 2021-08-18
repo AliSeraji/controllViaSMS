@@ -4,7 +4,11 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<data>
+    <variable
+        name="mainData"
+        type="com.example.smscontroller.MainData" />
+</data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -118,7 +122,8 @@
         android:gravity="start|center_vertical"
         android:layout_marginStart="10dp"
         android:id="@+id/device_name"
-
+        tools:text=""
+        app:deviceName="@{mainData}"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -132,7 +137,8 @@
         android:id="@+id/device_quantity"
         android:gravity="start|center_vertical"
         android:layout_marginStart="10dp"
-
+        tools:text=""
+        app:deviceQuantity="@{mainData}"
          />
 
 

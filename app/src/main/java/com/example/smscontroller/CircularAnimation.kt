@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Build
 import android.view.View
 import android.view.ViewAnimationUtils
-import android.view.animation.BounceInterpolator
+
+import android.view.animation.LinearInterpolator
+import androidx.recyclerview.widget.RecyclerView
 
 class CircularAnimation {
     fun circularRevealAnimation(view: View){
@@ -23,7 +25,7 @@ class CircularAnimation {
             //set animation duration
             anim.duration=1000
             //set animation interpolator
-            anim.interpolator=BounceInterpolator()
+            anim.interpolator=LinearInterpolator()
             // make the view visible and start the animation
             view.visibility = View.VISIBLE
 
@@ -50,7 +52,7 @@ class CircularAnimation {
             //set animation duration
             anim.duration=1000
             //set animation interpolator
-            anim.interpolator=BounceInterpolator()
+            anim.interpolator=LinearInterpolator()
             // make the view invisible when the animation is done
             anim.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
@@ -65,6 +67,7 @@ class CircularAnimation {
             view.visibility = View.VISIBLE
         }
     }
+
 
 
 }
