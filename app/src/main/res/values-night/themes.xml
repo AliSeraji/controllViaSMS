@@ -59,6 +59,9 @@
     <style name="back_btn_style" parent="Theme.MaterialComponents">
         <item name="android:background">?attr/colorOnSecondary</item>
     </style>
+    <style name="recyclerview_bottom_bar_style" parent="Theme.MaterialComponents">
+        <item name="android:background">?attr/colorSecondary</item>
+    </style>
 
 
 </resources>

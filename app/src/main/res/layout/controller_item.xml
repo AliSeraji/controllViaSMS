@@ -9,14 +9,19 @@
         name="mainData"
         type="com.example.smscontroller.MainData" />
 </data>
-
+<io.armcha.elasticview.ElasticView
+    android:id="@+id/elastic_view"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    style="@style/recyclerItem"
+    app:flexibility="10"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    >
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/recyclerItem"
-    android:layout_margin="3dp"
-    android:elevation="15dp"
-    android:translationZ="1dp"
+    android:layout_height="match_parent"
+
     >
 
     <androidx.constraintlayout.widget.Guideline
@@ -43,7 +48,15 @@
         android:layout_height="wrap_content"
         android:id="@+id/item_v3"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent=".4"
+        app:layout_constraintGuide_percent=".425"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_v4"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".575"
         app:layout_constraintStart_toStartOf="parent"
         />
 
@@ -62,7 +75,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/item_h2"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".9"
+        app:layout_constraintGuide_percent=".7"
         app:layout_constraintStart_toStartOf="parent"
         />
 
@@ -71,26 +84,27 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/item_v2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/get_device_quantity"
-        app:layout_constraintBottom_toTopOf="@id/del_device"
+        app:layout_constraintStart_toStartOf="@id/item_v3"
+        app:layout_constraintEnd_toStartOf="@id/item_v4"
+        app:layout_constraintTop_toBottomOf="@id/item_h2"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         android:id="@+id/get_device_details"
-        android:src="@drawable/ic_more"
+        android:src="@drawable/ic_more_options"
         android:layout_margin="5dp"
         android:clickable="true"
         android:focusable="true"
+        android:foregroundGravity="center"
         />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/item_v2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/get_device_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_v1"
+        app:layout_constraintTop_toBottomOf="@id/item_h2"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         android:id="@+id/get_device_quantity"
-        android:src="@drawable/ic_refreshing"
+        android:src="@drawable/ic_refresh"
         android:layout_marginTop="5dp"
         android:clickable="true"
         android:focusable="true"
@@ -102,10 +116,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/item_v2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/get_device_details"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/item_h2"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         android:id="@+id/del_device"
-        android:src="@drawable/ic_delete"
+        android:src="@drawable/ic_trashcan_delete"
         android:layout_margin="5dp"
         android:clickable="true"
         android:focusable="true"
@@ -113,13 +127,14 @@
 
 
     <androidx.appcompat.widget.AppCompatTextView
-        app:layout_constraintTop_toTopOf="@id/item_h1"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/item_v2"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="50dp"
         android:textSize="25sp"
-        android:gravity="start|center_vertical"
+        android:gravity="top|center"
+        android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:id="@+id/device_name"
         tools:text=""
@@ -129,18 +144,29 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/item_v2"
-        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="@id/item_h2"
         app:layout_constraintTop_toBottomOf="@id/device_name"
-        android:textSize="23sp"
+        android:textSize="30sp"
         android:id="@+id/device_quantity"
-        android:gravity="start|center_vertical"
+        android:gravity="center"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         tools:text=""
         app:deviceQuantity="@{mainData}"
          />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:id="@+id/bottom_bar"
+        android:layout_marginTop="10dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/recyclerview_bottom_bar_style"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</io.armcha.elasticview.ElasticView>
 </layout>

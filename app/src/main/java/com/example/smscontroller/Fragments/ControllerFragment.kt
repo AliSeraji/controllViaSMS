@@ -150,10 +150,14 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
             it.let {
                 lifecycleScope.launch {
                     //MainActivity.allStations=removeFromMutableList(MainActivity.allStations,station!!)
-                    MainActivity.allStations.remove(station)
-                    MainActivity.stationPhysicalID.remove(station!!.physicalID)
-                    MainActivity.stationPhoneNumbers.remove(station.phone)
-                    viewModel.deleteStation(station)
+                    var index=MainActivity.stationPhysicalID.indexOf(station!!.physicalID)
+                    if(index!=-1){
+                        MainActivity.allStations.removeAt(index)
+                        MainActivity.stationPhysicalID.remove(station.physicalID)
+                        MainActivity.stationPhoneNumbers.remove(station.phone)
+                        viewModel.deleteStation(station)
+                    }
+
                 }
                 recyclerView.notifyItemRemoved(pos)
                 recyclerView.notifyItemRangeChanged(pos, it.size)
