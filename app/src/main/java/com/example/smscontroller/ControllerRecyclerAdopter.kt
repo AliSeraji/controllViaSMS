@@ -4,6 +4,7 @@ package com.example.smscontroller
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -12,7 +13,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.ControllerItemBinding
+import com.skydoves.elasticviews.ElasticFinishListener
+import com.skydoves.elasticviews.elasticAnimation
+import kotlinx.android.synthetic.main.controller_item.view.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.sync.Mutex
 import java.lang.ClassCastException
 
@@ -85,36 +90,51 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
 
     class ControllerItemHolder(val binding: ControllerItemBinding):RecyclerView.ViewHolder(binding.root){
 
+
+
         fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener){
             val circularAnimation=CircularAnimation()
             if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow){
                 //binding.getDeviceQuantity.clearAnimation()
-                circularAnimation.circularRevealAnimation(binding.getDeviceDetails)
-                circularAnimation.circularRevealAnimation(binding.getDeviceQuantity)
-                circularAnimation.circularRevealAnimation(binding.delDevice)
+                binding.getDeviceQuantity.isEnabled=true
+                binding.getDeviceDetails.isEnabled=true
+                binding.delDevice.isEnabled=true
+                circularAnimation.circularRevealAnimation(binding.deviceQuantity)
+                binding.spinKit.visibility=View.GONE
             }
             if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow){
-                circularAnimation.circularHideAnimation(binding.getDeviceDetails)
-                circularAnimation.circularHideAnimation(binding.getDeviceQuantity)
-                circularAnimation.circularHideAnimation(binding.delDevice)
+                binding.getDeviceQuantity.isEnabled=false
+                binding.getDeviceDetails.isEnabled=false
+                binding.delDevice.isEnabled=false
+                circularAnimation.circularHideAnimation(binding.deviceQuantity)
+                binding.spinKit.visibility=View.VISIBLE
             }
 
             //binding.controllerData=item
             binding.mainData=item
 
             binding.getDeviceDetails.setOnClickListener {
-                clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.station.id!!)
+                val anim=binding.getDeviceDetails.elasticAnimation(0.4f, 0.4f, 400,
+                    ElasticFinishListener { clickListener.onMoreDetailsClick(absoluteAdapterPosition,item.station.id!!) })
+                anim.doAction()
             }
 
             binding.getDeviceQuantity.setOnClickListener {
-                circularAnimation.circularHideAnimation(binding.getDeviceDetails)
-                circularAnimation.circularHideAnimation(binding.getDeviceQuantity)
-                circularAnimation.circularHideAnimation(binding.delDevice)
-                clickListener.onRefreshClick(item.station,absoluteAdapterPosition)
+                val anim=binding.getDeviceQuantity.elasticAnimation(0.4f, 0.4f, 400, ElasticFinishListener {
+                    circularAnimation.circularHideAnimation(binding.deviceQuantity)
+                    binding.spinKit.visibility=View.VISIBLE
+                    binding.getDeviceQuantity.isEnabled=false
+                    binding.getDeviceDetails.isEnabled=false
+                    binding.delDevice.isEnabled=false
+                    clickListener.onRefreshClick(item.station,absoluteAdapterPosition)
+                })
+                anim.doAction()
             }
 
             binding.delDevice.setOnClickListener {
-                clickListener.onDeleteItemClick(absoluteAdapterPosition,item.station)
+                val anim=binding.delDevice.elasticAnimation(0.4f, 0.4f, 400,
+                    ElasticFinishListener { clickListener.onDeleteItemClick(absoluteAdapterPosition,item.station) })
+                anim.doAction()
             }
             binding.executePendingBindings()
         }
@@ -152,14 +172,21 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
 
     }
 
+
+
     class AdopterDataDiffCallback:DiffUtil.ItemCallback<DataItem>(){
+
+
         override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+
             return  oldItem.id==newItem.id
+
         }
 
         override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
             return oldItem == newItem
         }
+
 
         /*override fun getChangePayload(oldItem: DataItem, newItem: DataItem): Any? {
             var bundle=Bundle()

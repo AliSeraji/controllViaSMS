@@ -162,10 +162,7 @@
             app:lb_btnColor="?attr/colorPrimaryVariant"
             android:stateListAnimator="@null"
             app:lb_cornerRadius="15dp"
-            app:lb_rippleEnable="true"
-            app:lb_btnRippleAlpha="10"
             app:lb_resetAfterFailed="true"
-            app:lb_btnRippleColor="?attr/colorOnPrimary"
             app:lb_btnText="@string/Submit"
             android:id="@+id/submit"
             />
@@ -186,8 +183,8 @@
             android:stateListAnimator="@null"
             app:lb_cornerRadius="15dp"
             app:lb_rippleEnable="true"
-            app:lb_btnRippleAlpha="10"
-            app:lb_btnRippleColor="?attr/colorOnPrimary"
+            app:lb_btnRippleAlpha="0"
+            app:lb_btnRippleColor="@color/white_aqua"
             app:lb_btnText="@string/back"
             android:id="@+id/return_back"
             />
@@ -206,8 +203,8 @@
             android:stateListAnimator="@null"
             app:lb_cornerRadius="15dp"
             app:lb_rippleEnable="true"
-            app:lb_btnRippleAlpha="10"
-            app:lb_btnRippleColor="?attr/colorOnPrimary"
+            app:lb_btnRippleAlpha="0"
+            app:lb_btnRippleColor="@color/white_aqua"
             app:lb_btnText="@string/clear_all_data"
             android:id="@+id/clear"
             />

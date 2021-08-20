@@ -21,23 +21,31 @@
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/v1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHeight_percent=".065"
         android:text="@string/messages_tab"
         android:gravity="center"
         style="@style/customActionbar"
         android:id="@+id/status_bar"
         />
-    <androidx.appcompat.widget.AppCompatImageButton
+    <com.skydoves.elasticviews.ElasticImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/v1"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/status_bar"
         app:layout_constraintHeight_percent=".065"
         android:src="@drawable/ic_arrow"
         style="@style/back_btn_style"
         android:id="@+id/back_btn"
+        android:clickable="true"
+        android:focusable="true"
+        app:imageView_scale="0.4"
+        app:imageView_duration="300"
+        android:layout_margin="15dp"
+        android:translationZ="10dp"
+
         />
 
 

@@ -85,6 +85,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     RecyclerviewIncomingOperation.DELETING->{
                         Toast.makeText(requireContext(),"Deleting",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                        recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.REFRESHING->{
                         Toast.makeText(requireContext(),"Refreshing",Toast.LENGTH_LONG).show()
@@ -93,15 +94,10 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     RecyclerviewIncomingOperation.UPDATING->{
                         Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
-                       // recyclerView.notifyItemChanged(0, ITEM_IS_NOT_PENDING)
-                        lifecycleScope.launch(Dispatchers.IO){
-                            recyclerView.addViewSubmitList(it)
-                        }
+
                     }
                     else ->{
-                        lifecycleScope.launch(Dispatchers.IO){
-                            recyclerView.addViewSubmitList(it)
-                        }
+                        recyclerView.addViewSubmitList(it)
                         //return@let
                     }
                 }

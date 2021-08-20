@@ -35,7 +35,7 @@
         android:background="@android:color/transparent"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.skydoves.elasticviews.ElasticFloatingActionButton
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="@id/v1"
@@ -47,6 +47,9 @@
         app:maxImageSize="25dp"
         app:fabCustomSize="60dp"
         android:elevation="10dp"
+        app:fabSize="normal"
+        app:fabutton_duration="400"
+        app:fabutton_scale="0.5"
         />
 
     <androidx.appcompat.widget.AppCompatTextView
