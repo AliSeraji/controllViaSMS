@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Build
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.animation.AccelerateDecelerateInterpolator
 
 import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +24,9 @@ class CircularAnimation {
             // create the animator for this view (the start radius is zero)
             val anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 1f, finalRadius)
             //set animation duration
-            anim.duration=1000
+            anim.duration=250
             //set animation interpolator
-            anim.interpolator=LinearInterpolator()
+            anim.interpolator=AccelerateDecelerateInterpolator()
             // make the view visible and start the animation
             view.visibility = View.VISIBLE
 
@@ -50,7 +51,7 @@ class CircularAnimation {
             // create the animation (the final radius is zero)
             val anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, initialRadius, 1f)
             //set animation duration
-            anim.duration=1000
+            anim.duration=250
             //set animation interpolator
             anim.interpolator=LinearInterpolator()
             // make the view invisible when the animation is done

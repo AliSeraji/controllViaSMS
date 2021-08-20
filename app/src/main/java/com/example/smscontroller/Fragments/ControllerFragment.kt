@@ -154,10 +154,12 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     }
 
                 }
-                //recyclerView.notifyItemRemoved(pos)
-                //recyclerView.notifyItemRangeChanged(pos, it.size)
+                //recyclerView.notifyItemRemoved(pos-1)
+                //recyclerView.notifyItemRangeChanged(pos-1, it.size)
                 //recyclerView.notifyItemRangeChanged(pos,viewModel.getDataForMonitoring().value!!.size)
-                //recyclerView.notifyDataSetChanged()
+
+                //***final destination***
+                recyclerView.notifyDataSetChanged()
 
             }
         })

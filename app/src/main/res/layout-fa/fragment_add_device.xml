@@ -231,7 +231,7 @@
             app:lb_btnRippleColor="@color/white_aqua"
             app:lb_btnText="اضافه تستی"
             android:id="@+id/addFake"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
 

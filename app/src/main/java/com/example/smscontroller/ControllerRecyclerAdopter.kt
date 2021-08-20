@@ -80,6 +80,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     }*/
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
         when(holder){
                 is ControllerItemHolder->{
                     val item=getItem(position) as DataItem.ControllerItem
@@ -107,7 +108,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                 && ControllerFragment.recyclerviewIncomingOperation!=ControllerFragment.RecyclerviewIncomingOperation.REFRESHING
                 && ControllerFragment.recyclerviewIncomingOperation!=ControllerFragment.RecyclerviewIncomingOperation.DELETING
             ){
-
+                this.setIsRecyclable(true)
                 binding.getDeviceQuantity.isEnabled=true
                 binding.getDeviceDetails.isEnabled=true
                 binding.delDevice.isEnabled=true
@@ -115,6 +116,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                 binding.spinKit.visibility=View.GONE
             }
             if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow ){
+                this.setIsRecyclable(false)
                 binding.getDeviceQuantity.isEnabled=false
                 binding.getDeviceDetails.isEnabled=false
                 binding.delDevice.isEnabled=false
@@ -147,6 +149,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                     binding.getDeviceDetails.isEnabled=false
                     binding.delDevice.isEnabled=false
                     clickListener.onRefreshClick(item.station,absoluteAdapterPosition)
+
                 })
                 anim.doAction()
             }
