@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smscontroller.*
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.FragmentControllerBinding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
@@ -83,17 +82,19 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                         recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.DELETING->{
-                        Toast.makeText(requireContext(),"Deleting",Toast.LENGTH_LONG).show()
+                        //Toast.makeText(requireContext(),"Deleting",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
                         recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.REFRESHING->{
-                        Toast.makeText(requireContext(),"Refreshing",Toast.LENGTH_LONG).show()
+                        //Toast.makeText(requireContext(),"Refreshing",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                        //recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.UPDATING->{
-                        Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
+                        //Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                        //recyclerView.addViewSubmitList(it)
 
                     }
                     else ->{
@@ -148,15 +149,18 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     //MainActivity.allStations=removeFromMutableList(MainActivity.allStations,station!!)
                     var index=MainActivity.stationPhysicalID.indexOf(station!!.physicalID)
                     if(index!=-1){
-                        MainActivity.allStations.removeAt(index)
+                        //MainActivity.allStations.removeAt(index)
+                        MainActivity.allStations.remove(station)
                         MainActivity.stationPhysicalID.remove(station.physicalID)
                         MainActivity.stationPhoneNumbers.remove(station.phone)
                         viewModel.deleteStation(station)
                     }
 
                 }
+
                 recyclerView.notifyItemRemoved(pos)
                 recyclerView.notifyItemRangeChanged(pos, it.size)
+                //recyclerView.notifyItemRangeChanged(pos,viewModel.getDataForMonitoring().value!!.size)
                 recyclerView.notifyDataSetChanged()
 
             }

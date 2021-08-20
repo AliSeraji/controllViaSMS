@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.smscontroller.Fragments.ControllerFragment
 import com.example.smscontroller.databaseModel.Station
 import com.example.smscontroller.databinding.ControllerItemBinding
 import com.skydoves.elasticviews.ElasticFinishListener
@@ -28,7 +29,7 @@ private val IS_PENDING="IS_PENDING"
 private val IS_NOT_ENDING="IS_NOT_ENDING"
 class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecyclerItemClickListener):ListAdapter<ControllerRecyclerAdopter.DataItem,RecyclerView.ViewHolder>(AdopterDataDiffCallback()){
 
-    private val mutex= Mutex()
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     private val mOnItemClickListener=onItemClickListener
     private val mContext=context
@@ -52,20 +53,20 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
     }
 
-    /*override fun onBindViewHolder(
+    override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
         payloads: MutableList<Any>
     ) {
 
-        if(payloads.isEmpty()){
-            Toast.makeText(mContext,"pay load empty",Toast.LENGTH_LONG).show()
+        if(payloads.isEmpty() || payloads[0] !is Bundle){
+            //Toast.makeText(mContext,"pay load empty",Toast.LENGTH_LONG).show()
             onBindViewHolder(holder,position)
             return
         }
-        var bundle= payloads[0]
+        var bundle= payloads[0] as Bundle
         Toast.makeText(mContext,"has pay load",Toast.LENGTH_LONG).show()
-        if(bundle==true){
+        if(bundle.containsKey(IS_PENDING)){
             Toast.makeText(mContext,"ISPENDING",Toast.LENGTH_LONG).show()
         }
         when(holder){
@@ -76,7 +77,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
 
         super.onBindViewHolder(holder, position, payloads)
-    }*/
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
@@ -94,7 +95,14 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
 
         fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener){
             val circularAnimation=CircularAnimation()
-            if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow){
+
+
+            //binding.controllerData=item
+            binding.mainData=item
+
+
+
+            if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow && ControllerFragment.recyclerviewIncomingOperation!= ControllerFragment.RecyclerviewIncomingOperation.IDLE){
                 //binding.getDeviceQuantity.clearAnimation()
                 binding.getDeviceQuantity.isEnabled=true
                 binding.getDeviceDetails.isEnabled=true
@@ -102,7 +110,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                 circularAnimation.circularRevealAnimation(binding.deviceQuantity)
                 binding.spinKit.visibility=View.GONE
             }
-            if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow){
+            if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow && ControllerFragment.recyclerviewIncomingOperation!= ControllerFragment.RecyclerviewIncomingOperation.IDLE){
                 binding.getDeviceQuantity.isEnabled=false
                 binding.getDeviceDetails.isEnabled=false
                 binding.delDevice.isEnabled=false
@@ -110,8 +118,6 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
                 binding.spinKit.visibility=View.VISIBLE
             }
 
-            //binding.controllerData=item
-            binding.mainData=item
 
             binding.getDeviceDetails.setOnClickListener {
                 val anim=binding.getDeviceDetails.elasticAnimation(0.4f, 0.4f, 400,
@@ -188,18 +194,19 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
 
 
-        /*override fun getChangePayload(oldItem: DataItem, newItem: DataItem): Any? {
+        override fun getChangePayload(oldItem: DataItem, newItem: DataItem): Any? {
             var bundle=Bundle()
             return when{
-                !oldItem.isPending && newItem.isPending ->{
-                    bundle.putBoolean(IS_NOT_ENDING,newItem.isPending)
-                }
                 oldItem.isPending && !newItem.isPending ->{
+                    bundle.putBoolean(IS_NOT_ENDING,newItem.isPending)
+                    return bundle
+                }
+                !oldItem.isPending && newItem.isPending ->{
                     bundle.putBoolean(IS_PENDING,newItem.isPending)
-
+                    return bundle
                 }
                 else -> null
             }
-        }*/
+        }
     }
 }
