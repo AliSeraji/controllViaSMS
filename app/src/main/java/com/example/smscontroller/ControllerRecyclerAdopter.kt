@@ -53,7 +53,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
     }
 
-    override fun onBindViewHolder(
+    /*override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
         position: Int,
         payloads: MutableList<Any>
@@ -66,7 +66,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
         var bundle= payloads[0] as Bundle
         Toast.makeText(mContext,"has pay load",Toast.LENGTH_LONG).show()
-        if(bundle.containsKey(IS_PENDING)){
+        if(bundle.getBoolean(IS_PENDING)){
             Toast.makeText(mContext,"ISPENDING",Toast.LENGTH_LONG).show()
         }
         when(holder){
@@ -77,7 +77,7 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
         }
 
         super.onBindViewHolder(holder, position, payloads)
-    }
+    }*/
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
@@ -89,34 +89,48 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
     }
 
 
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        if(holder is ControllerItemHolder){
+            val item=getItem(holder.absoluteAdapterPosition) as DataItem.ControllerItem
+            holder.controlAnimations(item.data)
+        }
+        else
+            super.onViewAttachedToWindow(holder)
+    }
+
+
     class ControllerItemHolder(val binding: ControllerItemBinding):RecyclerView.ViewHolder(binding.root){
 
-
-
-        fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener){
+        fun controlAnimations(item:MainData){
             val circularAnimation=CircularAnimation()
+            if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow
+                && ControllerFragment.recyclerviewIncomingOperation!=ControllerFragment.RecyclerviewIncomingOperation.REFRESHING
+                && ControllerFragment.recyclerviewIncomingOperation!=ControllerFragment.RecyclerviewIncomingOperation.DELETING
+            ){
 
-
-            //binding.controllerData=item
-            binding.mainData=item
-
-
-
-            if(!item.station.isPending && binding.getDeviceDetails.isAttachedToWindow && ControllerFragment.recyclerviewIncomingOperation!= ControllerFragment.RecyclerviewIncomingOperation.IDLE){
-                //binding.getDeviceQuantity.clearAnimation()
                 binding.getDeviceQuantity.isEnabled=true
                 binding.getDeviceDetails.isEnabled=true
                 binding.delDevice.isEnabled=true
                 circularAnimation.circularRevealAnimation(binding.deviceQuantity)
                 binding.spinKit.visibility=View.GONE
             }
-            if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow && ControllerFragment.recyclerviewIncomingOperation!= ControllerFragment.RecyclerviewIncomingOperation.IDLE){
+            if(item.station.isPending && binding.getDeviceDetails.isAttachedToWindow ){
                 binding.getDeviceQuantity.isEnabled=false
                 binding.getDeviceDetails.isEnabled=false
                 binding.delDevice.isEnabled=false
                 circularAnimation.circularHideAnimation(binding.deviceQuantity)
                 binding.spinKit.visibility=View.VISIBLE
             }
+
+        }
+
+        fun bind(context: Context,item:MainData,clickListener: OnRecyclerItemClickListener){
+            val circularAnimation=CircularAnimation()
+
+            controlAnimations(item)
+
+            //binding.controllerData=item
+            binding.mainData=item
 
 
             binding.getDeviceDetails.setOnClickListener {
@@ -199,11 +213,10 @@ class ControllerRecyclerAdopter(context: Context, onItemClickListener: OnRecycle
             return when{
                 oldItem.isPending && !newItem.isPending ->{
                     bundle.putBoolean(IS_NOT_ENDING,newItem.isPending)
-                    return bundle
+
                 }
                 !oldItem.isPending && newItem.isPending ->{
                     bundle.putBoolean(IS_PENDING,newItem.isPending)
-                    return bundle
                 }
                 else -> null
             }

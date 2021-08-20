@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import com.example.smscontroller.MainActivity
 import com.example.smscontroller.R
 import com.example.smscontroller.SMSViewModel
+import com.example.smscontroller.addFakeData
 import com.example.smscontroller.databinding.FragmentAddDeviceBinding
 import kotlinx.coroutines.launch
 
@@ -101,6 +102,13 @@ class AddDeviceFragment : Fragment() {
             MainActivity.allStations.clear()
             MainActivity.stationPhoneNumbers.clear()
             MainActivity.stationPhysicalID.clear()
+        }
+
+        binding.addFake?.setOnClickListener {
+            for(station in addFakeData()){
+                viewModel.insertStation(station)
+            }
+            Toast.makeText(requireContext(),R.string.success,Toast.LENGTH_LONG).show()
         }
 
     }

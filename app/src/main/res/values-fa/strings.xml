@@ -14,7 +14,7 @@
     <string name="success">عملیات موفق بود.</string>
     <string name="data_clear_warning">تمامی داده ها پاک شدند.</string>
     <string name="sms_sent">پیامک ارسال شد.</string>
-    <string name="quantity">مقدار :%1$s</string>
+    <string name="quantity">%1$s</string>
     <string name="date">%1$s</string>
     <string name="message_text"> %1$s </string>
     <string name="refresh_failure">خطا در بروز رسانی فیلد!</string>

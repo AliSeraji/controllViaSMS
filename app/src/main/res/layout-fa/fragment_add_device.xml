@@ -25,6 +25,14 @@
             android:id="@+id/v2"
             />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent=".15"
+            android:orientation="vertical"
+            android:id="@+id/v3"
+            />
+
 
         <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
@@ -166,6 +174,25 @@
             />
 
 
+        <com.skydoves.elasticviews.ElasticImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/action_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/v3"
+            android:textAlignment="center"
+            android:foregroundGravity="center"
+            android:background="?attr/colorPrimaryVariant"
+            android:id="@+id/return_back"
+            android:src="@drawable/ic_arrow"
+            app:imageView_duration="300"
+            app:imageView_scale=".5"
+            android:rotationY="180"
+            android:translationZ="1dp"
+            android:layout_margin="12dp"
+            />
+
         <com.dx.dxloadingbutton.lib.LoadingButton
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -182,8 +209,8 @@
             app:lb_rippleEnable="true"
             app:lb_btnRippleAlpha="5"
             app:lb_btnRippleColor="@color/white_aqua"
-            app:lb_btnText="@string/back"
-            android:id="@+id/return_back"
+            app:lb_btnText="@string/clear_all_data"
+            android:id="@+id/clear"
             />
 
         <com.dx.dxloadingbutton.lib.LoadingButton
@@ -202,8 +229,9 @@
             app:lb_rippleEnable="true"
             app:lb_btnRippleAlpha="5"
             app:lb_btnRippleColor="@color/white_aqua"
-            app:lb_btnText="@string/clear_all_data"
-            android:id="@+id/clear"
+            app:lb_btnText="اضافه تستی"
+            android:id="@+id/addFake"
+            android:visibility="gone"
             />
 
 
@@ -217,6 +245,7 @@
             android:text="@string/add_device"
             android:gravity="center"
             style="@style/customActionbar"
+            android:id="@+id/action_bar"
             />
 
 

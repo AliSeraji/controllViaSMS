@@ -71,7 +71,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
         viewModel=ViewModelProvider(requireActivity()).get(SMSViewModel::class.java)
         recyclerView=ControllerRecyclerAdopter(requireContext(),this)
-        recyclerView.stateRestorationPolicy=RecyclerView.Adapter.StateRestorationPolicy.PREVENT
+        recyclerView.stateRestorationPolicy=RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.deviceRecyclerView.itemAnimator=ControllerRecyclerItemAnimator()
         binding.deviceRecyclerView.adapter=recyclerView
         binding.lifecycleOwner = this
@@ -83,18 +83,18 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     }
                     RecyclerviewIncomingOperation.DELETING->{
                         //Toast.makeText(requireContext(),"Deleting",Toast.LENGTH_LONG).show()
-                        recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
+                        //recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
                         recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.REFRESHING->{
                         //Toast.makeText(requireContext(),"Refreshing",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
-                        //recyclerView.addViewSubmitList(it)
+                        recyclerView.addViewSubmitList(it)
                     }
                     RecyclerviewIncomingOperation.UPDATING->{
                         //Toast.makeText(requireContext(),"Updating",Toast.LENGTH_LONG).show()
                         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.IDLE
-                        //recyclerView.addViewSubmitList(it)
+                        recyclerView.addViewSubmitList(it)
 
                     }
                     else ->{
@@ -104,9 +104,6 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                 }
             }
         })
-        
-
-
     }
 
     private fun events(){
@@ -143,7 +140,7 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
 
     override fun onDeleteItemClick(pos: Int, station: Station?) {
         recyclerviewIncomingOperation=RecyclerviewIncomingOperation.DELETING
-        viewModel.getDataForMonitoring().observe(viewLifecycleOwner,{
+        viewModel.getAllStationsToObserve().observe(viewLifecycleOwner,{
             it.let {
                 lifecycleScope.launch {
                     //MainActivity.allStations=removeFromMutableList(MainActivity.allStations,station!!)
@@ -157,15 +154,13 @@ class ControllerFragment : Fragment(),ControllerRecyclerAdopter.OnRecyclerItemCl
                     }
 
                 }
-
-                recyclerView.notifyItemRemoved(pos)
-                recyclerView.notifyItemRangeChanged(pos, it.size)
+                //recyclerView.notifyItemRemoved(pos)
+                //recyclerView.notifyItemRangeChanged(pos, it.size)
                 //recyclerView.notifyItemRangeChanged(pos,viewModel.getDataForMonitoring().value!!.size)
-                recyclerView.notifyDataSetChanged()
+                //recyclerView.notifyDataSetChanged()
 
             }
         })
-
     }
 
    companion object{

@@ -3,6 +3,16 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <io.armcha.elasticview.ElasticView
+        android:id="@+id/elastic_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/recyclerItem"
+        app:flexibility="10"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        android:layout_margin="3dp"
+        >
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -48,4 +58,5 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </io.armcha.elasticview.ElasticView>
 </layout>
